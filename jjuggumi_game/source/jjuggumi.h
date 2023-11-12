@@ -11,8 +11,9 @@
 #include "games.h"
 
 #define PLAYER_MAX 10 // 최대 플레이어 수 10
+#define ITEM_MAX 10
 
-#define DIALOG_DURATION_SEC		4
+#define DIALOG_DURATION_SEC	4
 
 bool player_status[PLAYER_MAX];  // 기본값 true, 탈락하면 false
 bool player_statuspost[PLAYER_MAX];
@@ -21,20 +22,35 @@ int px[PLAYER_MAX], py[PLAYER_MAX], period[PLAYER_MAX];  // 각 플레이어 위치, 이
 
 int player_outlist[PLAYER_MAX];
 int n_player, n_alive, n_alivepost; // 플레이어 수, 살아남은 플레이어 수, 이전 대조값
+int n_item;
+
 int tick;  // 시계
 int pass_n_player;
 
+typedef struct {
+	char name[100];
+	int intel_buf, str_buf, stamina_buf;
+} ITEM;
 
-int jjuggumi_init(void); // main() 시작 시 쭈꾸미 게임 플레이어 수를 입력 받음
+ITEM item[ITEM_MAX];
 
+typedef struct {
+	int id;
+	char name[100];
+	int intel, str, stamina;
+	bool is_alive, hasitem;
+	ITEM item;
+} PLAYER;
 
+PLAYER player[PLAYER_MAX];
 
-// ===== 기타 목록 =====
-void intro(void); // [쭈꾸미 게임 인트로] 함수
-void ending(void);// [쭈꾸미 게임 엔딩] 함수
-void sample(void); // [간단한 예시 샘플] 함수
-
-void move_random(int player, int dir);
-void move_tail(int player, int nx, int ny);
+// main() 시작 시 쭈꾸미 게임 플레이어 수를 입력 받음
+int jjuggumi_init(void);
+// [쭈꾸미 게임 인트로] 함수
+void intro(void);
+// [쭈꾸미 게임 엔딩] 함수
+void ending(void);
+// [간단한 예시 샘플] 함수
+void sample(void);
 
 #endif

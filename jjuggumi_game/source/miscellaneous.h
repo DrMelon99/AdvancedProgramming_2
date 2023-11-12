@@ -32,5 +32,4 @@ void mugunghwasong(int sound);
 
 // 콘솔 창의 폰트 크기 조정
 void SetConsoleFontSize(int size);
-
 #endif

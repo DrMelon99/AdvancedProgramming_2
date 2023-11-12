@@ -324,7 +324,6 @@ void SetConsoleFontSize(int size)
 	fontInfo.dwFontSize.Y = size;
 	SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &fontInfo);
 }
-
 int randint(int low, int high)
 {
 	int rnum = rand() % (high - low + 1) + low;
