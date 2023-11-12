@@ -4,6 +4,7 @@
 #include "jjuggumi.h"
 #include "canvas.h"
 
+
 void draw(void);
 void print_status(void);
 

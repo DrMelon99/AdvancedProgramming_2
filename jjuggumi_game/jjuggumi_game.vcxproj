@@ -21,6 +21,10 @@
   <ItemGroup>
     <ClCompile Include="source\canvas.c" />
     <ClCompile Include="source\games.c" />
+    <ClCompile Include="source\games\game_jebi.c" />
+    <ClCompile Include="source\games\game_juldarigi.c" />
+    <ClCompile Include="source\games\game_mugunghwa.c" />
+    <ClCompile Include="source\games\game_nightgame.c" />
     <ClCompile Include="source\jjuggumi.c" />
     <ClCompile Include="source\keyin.c" />
     <ClCompile Include="source\media.c" />

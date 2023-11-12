@@ -33,6 +33,18 @@
     <ClCompile Include="source\games.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="source\games\game_jebi.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="source\games\game_juldarigi.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="source\games\game_mugunghwa.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="source\games\game_nightgame.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\canvas.h">

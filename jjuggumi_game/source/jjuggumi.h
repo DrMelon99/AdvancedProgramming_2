@@ -1,6 +1,12 @@
 #ifndef _JJUGGUMI_H_
 #define _JJUGGUMI_H_
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <Windows.h>
+#include "jjuggumi.h"
+#include "canvas.h"
+
 #include <Windows.h>
 #include <stdbool.h>
 
