@@ -27,22 +27,22 @@
     <ClCompile Include="source\sample.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="source\media.c">
+    <ClCompile Include="source\miscellaneous.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="source\games.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="source\games\game_jebi.c">
+    <ClCompile Include="source\game_jebi.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="source\games\game_juldarigi.c">
+    <ClCompile Include="source\game_juldarigi.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="source\games\game_mugunghwa.c">
+    <ClCompile Include="source\game_mugunghwa.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="source\games\game_nightgame.c">
+    <ClCompile Include="source\game_nightgame.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,7 +56,7 @@
     <ClInclude Include="source\keyin.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="source\media.h">
+    <ClInclude Include="source\miscellaneous.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="source\games.h">

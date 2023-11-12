@@ -1,45 +1,5 @@
 ﻿  game_jebi.c
   game_juldarigi.c
-  game_mugunghwa.c
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(3,2): warning C4013: 'mugunghwa_init'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(5,2): warning C4013: 'display'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(22,9): error C2065: 'key_t': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(22,9): error C2146: 구문 오류: ';'이(가) 'key' 식별자 앞에 없습니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(22,13): error C2065: 'key': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(22,15): warning C4013: 'get_key'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(23,11): error C2065: 'key': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(23,20): error C2065: 'K_QUIT': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(26,16): error C2065: 'key': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(26,30): error C2065: 'K_UNDEFINED': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(27,4): warning C4013: 'move_manual'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(27,19): error C2065: 'key': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(31,31): error C2065: 'n_player': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(32,13): error C2065: 'tick': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(32,22): error C2065: 'period': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(32,21): error C2109: 첨자는 배열 또는 포인터 형식을 사용해야 합니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(33,5): warning C4013: 'move_random'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(38,3): warning C4013: 'Sleep'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(39,8): error C2065: 'tick': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(43,6): error C2371: 'mugunghwa_init': 재정의. 기본 형식이 다릅니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(45,2): warning C4013: 'system'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(47,2): warning C4013: 'SetConsoleFontSize'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(50,2): warning C4013: 'map_init'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(54,30): error C2065: 'n_player': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(57,8): warning C4013: 'randint'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(57,25): error C2065: 'N_ROW': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(58,15): error C2065: 'N_COL': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(59,13): warning C4013: 'placable'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(60,6): error C2065: 'px': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(60,5): error C2109: 첨자는 배열 또는 포인터 형식을 사용해야 합니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(61,6): error C2065: 'py': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(61,5): error C2109: 첨자는 배열 또는 포인터 형식을 사용해야 합니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(62,10): error C2065: 'period': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(62,9): error C2109: 첨자는 배열 또는 포인터 형식을 사용해야 합니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(64,12): error C2065: 'back_buf': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(64,15): error C2065: 'px': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(64,14): error C2109: 첨자는 배열 또는 포인터 형식을 사용해야 합니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(64,22): error C2065: 'py': 선언되지 않은 식별자입니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(64,21): error C2109: 첨자는 배열 또는 포인터 형식을 사용해야 합니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\games\game_mugunghwa.c(72,7): error C2065: 'tick': 선언되지 않은 식별자입니다.
   game_nightgame.c
   코드를 생성하고 있습니다...
+  jjuggumi_game.vcxproj -> Z:\Dev\AdvancedProgramming_2\jjuggumi_game\x64\Debug\jjuggumi_game.exe

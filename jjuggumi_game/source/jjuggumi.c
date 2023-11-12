@@ -12,21 +12,15 @@
 int main(void)
 {
 	jjuggumi_init();
-	intro(); // 쭈꾸미 게임 인트로
-	mugunghwa(); // 무궁화 꽃이 피었습니다
-	// nightgame(); // 야간운동
+	// intro(); // 쭈꾸미 게임 인트로
+	// mugunghwa(); // 무궁화 꽃이 피었습니다
+	nightgame(); // 야간운동
 	// juldarigi(); // 줄다리기
 	// jebi(); // 제비 뽑기
 	// sample();
 	ending(); // 쭈꾸미 게임 엔딩
 
 	return 0;
-}
-
-int randint(int low, int high)
-{
-	int rnum = rand() % (high - low + 1) + low;
-	return rnum;
 }
 
 int jjuggumi_init(void)
