@@ -14,7 +14,7 @@ int main(void)
 	jjuggumi_init();
 	// intro(); // 쭈꾸미 게임 인트로
 	// mugunghwa(); // 무궁화 꽃이 피었습니다
-	// nightgame(); // 야간운동
+	nightgame(); // 야간운동
 	// juldarigi(); // 줄다리기
 	// jebi(); // 제비 뽑기
 	// sample();
@@ -25,6 +25,8 @@ int main(void)
 
 int jjuggumi_init(void)
 {
+	char start_option;
+
 	SetConsoleFontSize(14);
 	system("mode con: cols=50 lines=80");
 
@@ -35,6 +37,7 @@ int jjuggumi_init(void)
 
 	if (fp == NULL)
 	{
+		printf("jjuggumi.dat파일 찾을 수 없음\n게임 종료");
 		return -1;
 	}
 
@@ -45,7 +48,7 @@ int jjuggumi_init(void)
 	{
 		PLAYER* p = &player[i];
 
-		p->id = i + 1;
+		p->id = i;
 
 		fscanf_s(fp, "%s%d%d", p->name, (unsigned int)sizeof(p->name), &(p->intel), &(p->str));
 		
@@ -54,6 +57,24 @@ int jjuggumi_init(void)
 		// 현재 상태
 		p->is_alive = true;
 		p->hasitem = false;
+
+		/*if (i == 0)
+		{
+			do
+			{
+				printf("0번째 플레이어인 당신은 %s(이)가 맞습니까?\n(y / n) >> ", p->name);
+				scanf_s(" %c", &start_option, 1);
+
+				if (start_option == 'n')
+				{
+					printf("0번째 플레이어 이름 편집\n");
+					printf("이름>> ");
+					scanf_s(" %s", &p->name, 50);
+				}
+
+
+			} while ((start_option != 'y'));
+		}*/
 	}
 
 	// 아이템 데이터 load
@@ -65,7 +86,6 @@ int jjuggumi_init(void)
 			&(item[i].str_buf),
 			&(item[i].stamina_buf));
 	}
-
 	fclose(fp);
 
 	/*for (int i = 0; i < n_player; i++)
@@ -73,10 +93,10 @@ int jjuggumi_init(void)
 		printf("번호: %d\n이름: %s\n지능: %d\n힘: %d\n스태미나:%d\n생존여부: %d\n\n", player[i].id, player[i].name, player[i].intel, player[i].str, player[i].stamina, player[i].is_alive);
 	}*/
 
-	for (int i = 0; i < n_item; i++)
+	/*for (int i = 0; i < n_item; i++)
 	{
 		printf("아이템 이름: %s\n지능 버프: %d\n힘 버프: %d\n스태미나 버프: %d\n\n", item[i].name, item[i].intel_buf, item[i].str_buf, item[i].stamina_buf);
-	}
+	}*/
 	
 
 	//do

@@ -23,7 +23,11 @@ bool yh_killmode;
 int count;
 
 void move_random(int player, int dir);
+void move_manual(key_t key);
 void move_tail(int player, int nx, int ny);
+
+void move_random_mugunghwa(int player, int dir);
+void move_tail_mugunghwa(int player, int nx, int ny);
 
 void mugunghwa(void);
 void nightgame(void);
