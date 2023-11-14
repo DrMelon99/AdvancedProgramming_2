@@ -1,11 +1,3 @@
-﻿  canvas.c
-  game_jebi.c
-  game_juldarigi.c
-  game_mugunghwa.c
-  game_nightgame.c
-  games.c
-  jjuggumi.c
+﻿  jjuggumi.c
 Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\jjuggumi.c(28,7): warning C4101: 'start_option' :참조되지 않은 지역 변수입니다.
-  sample.c
-  코드를 생성하고 있습니다...
   jjuggumi_game.vcxproj -> Z:\Dev\AdvancedProgramming_2\jjuggumi_game\x64\Debug\jjuggumi_game.exe
