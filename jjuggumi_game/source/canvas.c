@@ -4,25 +4,21 @@
 #include "jjuggumi.h"
 #include "canvas.h"
 
-
-void draw(void);
-void print_status(void);
-
-// (zero-base) row행, col열로 커서 이동
+// ★ (zero-base) row행, col열로 커서 이동
 void gotoxy(int row, int col)
 {
 	COORD pos = { col,row };
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
-// row행, col열에 ch 출력
+// ★ row행, col열에 ch 출력
 void printxy(char ch, int row, int col)
 {
 	gotoxy(row, col);
 	printf("%c", ch);
 }
 
-// 두 버퍼를를 완전히 비우고 맵의 외곽을 #으로 구성
+// ★ 두 버퍼를를 완전히 비우고 맵의 외곽을 '*'로 구성
 void map_init(int n_row, int n_col)
 {
 	for (int i = 0; i < ROW_MAX; i++)
@@ -47,7 +43,7 @@ void map_init(int n_row, int n_col)
 	}
 }
 
-// back_buf[row][col]이 이동할 수 있는 자리인지 확인하는 함수
+// ★ back_buf[row][col]이 이동할 수 있는 자리인지 확인하는 함수
 bool placable(int row, int col)
 {
 	if (row < 0 || row >= N_ROW ||
@@ -59,7 +55,7 @@ bool placable(int row, int col)
 	return true;
 }
 
-// 상단에 맵을, 하단에는 현재 상태를 출력
+// ★ 상단에 맵을, 하단에는 현재 상태를 출력
 void display(void)
 {
 	draw();
@@ -67,7 +63,7 @@ void display(void)
 	print_status();
 }
 
-// 
+// 다이얼로그 출력
 void draw(void) {
 	for (int row = 0; row < N_ROW+1; row++) // 무궁화 꽃이 피었습니다 출력을 위해 임의로 N_ROW에 + 1
 	{
@@ -86,7 +82,7 @@ void print_status(void) {
 	printf("no. of players left: %2d\n", n_alive);
 	for (int p = 0; p < n_player; p++)
 	{
-		printf("player %2d: %5s\n", p, player_status[p] ? "alive" : "DEAD");
+		printf("player %2d: %5s\n", p, player[p].is_alive ? "alive" : "DEAD");
 	}
 }
 
@@ -118,7 +114,6 @@ void dialog(int opt, int left_s)
 		}
 	}
 
-	
 	if (left_s > 0)
 	{
 		// 멘트 출력

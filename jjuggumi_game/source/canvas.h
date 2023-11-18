@@ -20,10 +20,12 @@ char temp_buf[ROW_MAX][COL_MAX];
 int N_ROW, N_COL;
 
 void map_init(int n_row, int n_col);
-void dialog(int opt, int left_s);
 bool placable(int row, int col);
 void display(void);
 void gotoxy(int x, int y);
 void printxy(char ch, int row, int col);
+void draw(void);
+void print_status(void);
+void dialog(int opt, int left_s);
 
 #endif

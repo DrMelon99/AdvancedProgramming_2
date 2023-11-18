@@ -18,7 +18,7 @@ void mugunghwa(void)
 
 		// 사용자 움직임 키입력
 		key_t key = get_key();
-		if ((key == K_QUIT) || (n_alive == 1) || (count > 3) || (pass_n_player == n_alive))
+		if ((key == K_QUIT) || (n_alive == 1) || (count > 3))
 		{
 			break;
 		}
@@ -30,9 +30,9 @@ void mugunghwa(void)
 		// 다른 NPC 랜덤 움직임 작동
 		for (int i = 1; i < n_player; i++)
 		{
-			if (tick % period[i] == 0)
+			if (tick % player[i].period == 0)
 			{
-				move_random(i, -1);
+				move_random_mugunghwa(i, -1);
 			}
 		}
 
@@ -68,11 +68,11 @@ void mugunghwa_init(void)
 			x = randint(1, N_ROW - 2);
 			y = (N_COL - 2);
 		} while (!placable(x, y));
-		px[i] = x;
-		py[i] = y;
-		period[i] = randint(100, 500);
+		player[i].px = x;
+		player[i].py = y;
+		player[i].period = randint(100, 500);
 
-		back_buf[px[i]][py[i]] = '0' + i;  // (0 .. n_player-1)
+		back_buf[player[i].px][player[i].py] = '0' + i;  // (0 .. n_player-1)
 	}
 
 	tick = 0;
@@ -156,9 +156,9 @@ void younghee(void)
 
 			for (int i = 0, j = 0; i < n_player; i++)
 			{
-				if (player_statuspost[i] != player_status[i])
+				if (player_statuspost[i] != player[i].is_alive)
 				{
-					player_statuspost[i] = player_status[i];
+					player_statuspost[i] = player[i].is_alive;
 					player_outlist[j++] = i;
 				}
 			}

@@ -13,8 +13,8 @@ int main(void)
 {
 	jjuggumi_init();
 	// intro(); // 쭈꾸미 게임 인트로
-	mugunghwa(); // 무궁화 꽃이 피었습니다
-	// nightgame(); // 야간운동
+	// mugunghwa(); // 무궁화 꽃이 피었습니다
+	nightgame(); // 야간운동
 	// juldarigi(); // 줄다리기
 	// jebi(); // 제비 뽑기
 	// sample();
@@ -91,9 +91,8 @@ int jjuggumi_init(void)
 	/*for (int i = 0; i < n_player; i++)
 	{
 		printf("번호: %d\n이름: %s\n지능: %d\n힘: %d\n스태미나:%d\n생존여부: %d\n\n", player[i].id, player[i].name, player[i].intel, player[i].str, player[i].stamina, player[i].is_alive);
-	}*/
-
-	/*for (int i = 0; i < n_item; i++)
+	}
+	for (int i = 0; i < n_item; i++)
 	{
 		printf("아이템 이름: %s\n지능 버프: %d\n힘 버프: %d\n스태미나 버프: %d\n\n", item[i].name, item[i].intel_buf, item[i].str_buf, item[i].stamina_buf);
 	}*/
@@ -109,10 +108,11 @@ int jjuggumi_init(void)
 
 	//n_alive = n_alivepost = n_player; // 살아남은 플레이어 수를 입력받은 플레이어 수로 초기화
 
-	//for (int i = 0; i < n_player; i++)
-	//{
-	//	player_status[i] = player_statuspost[i] = true;
-	//} // 입력받은 n명의 플레이어들을 모두 true(살아있음)로 지정
+	// 입력받은 n명의 플레이어들을 모두 true(살아있음)로 지정
+	for (int i = 0; i < n_player; i++)
+	{
+		player[i].is_alive = true;
+	}
 
 	tick = 0;
 
@@ -141,7 +141,7 @@ void ending(void)
 		enline(3, 15);
 		for (int i = 0; i < n_player; i++)
 		{
-			if (player_status[i])
+			if (player[i].is_alive)
 			{
 				printf("%d번 플레이어\n", i);
 			}
@@ -154,7 +154,7 @@ void ending(void)
 		enline(3, 15);
 		for (int i = 0; i < n_player; i++)
 		{
-			if (player_status[i])
+			if (player[i].is_alive)
 			{
 				printf("%d번 플레이어\n", i);
 			}

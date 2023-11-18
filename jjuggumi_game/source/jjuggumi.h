@@ -15,10 +15,9 @@
 
 #define DIALOG_DURATION_SEC	4
 
-bool player_status[PLAYER_MAX];  // 기본값 true, 탈락하면 false
 bool player_statuspost[PLAYER_MAX];
 
-int px[PLAYER_MAX], py[PLAYER_MAX], period[PLAYER_MAX];  // 각 플레이어 위치, 이동 주기
+// int px[PLAYER_MAX], py[PLAYER_MAX], period[PLAYER_MAX];  // 각 플레이어 위치, 이동 주기
 
 int player_outlist[PLAYER_MAX];
 int n_player, n_alive, n_alivepost; // 플레이어 수, 살아남은 플레이어 수, 이전 대조값
@@ -36,6 +35,8 @@ ITEM item[ITEM_MAX];
 
 typedef struct {
 	int id;
+	int px, py;
+	int period;
 	char name[100];
 	int intel, str, stamina;
 	bool is_alive, hasitem;
