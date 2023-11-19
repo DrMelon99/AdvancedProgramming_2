@@ -3,13 +3,10 @@
 void mugunghwa(void)
 {
 	mugunghwa_init();
+
 	display();
 
-	// 게임 시작 타이머
-	for (int i = DIALOG_DURATION_SEC; i > -1; i--)
-	{
-		dialog(0, i);
-	}
+	dialog(0);
 
 	while (1)
 	{

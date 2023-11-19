@@ -27,23 +27,24 @@ int tick;  // 시계
 int pass_n_player;
 
 typedef struct {
-	char name[100];
-	int intel_buf, str_buf, stamina_buf;
+	char name[100]; // 아이템 이름
+	int ix, iy; // 아이템 좌표 x,y
+	int intel_buf, str_buf, stamina_buf; // 아이템의 지능, 힘, 스태미나 증가 능력치
 } ITEM;
 
-ITEM item[ITEM_MAX];
+ITEM item[ITEM_MAX]; // ITEM 배열 인덱스의 최대치를 ITEM_MAX로 설정
 
 typedef struct {
-	int id;
-	int px, py;
-	int period;
-	char name[100];
-	int intel, str, stamina;
-	bool is_alive, hasitem;
-	ITEM item;
+	int id; // 플레이어 번호
+	int px, py; // 플레이어 좌표 x,y
+	int period; // 플레이어 이동주기
+	char name[100]; // 플레이어 이름
+	int intel, str, stamina; // 플레이어 지능, 힘, 스태미나
+	bool is_alive, hasitem; // 플레이어 생존 여부, 아이템 소지여부
+	ITEM item; // 플레이어가 가지고 있는 아이템 정보
 } PLAYER;
 
-PLAYER player[PLAYER_MAX];
+PLAYER player[PLAYER_MAX]; // 플레이어 배열 인덱스의 최대치를 PLAYER_MAX로 설정
 
 // main() 시작 시 쭈꾸미 게임 플레이어 수를 입력 받음
 int jjuggumi_init(void);

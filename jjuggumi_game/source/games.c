@@ -142,3 +142,26 @@ void move_tail_mugunghwa(int p, int nx, int ny)
 		}
 	}
 }
+
+void move_random_nightgame(int p, int dir)
+{
+	int nx, ny;  // 움직여서 다음에 놓일 자리
+
+	// 움직일 공간이 없는 경우는 없다고 가정(무한 루프에 빠짐)	
+	do
+	{
+		nx = player[p].px + randint(-1, 1);
+		ny = player[p].py + randint(-1, 1);
+	} while (!placable(nx, ny));
+
+	move_tail_nightgame(p, nx, ny);
+}
+
+// ★ back_buf[][]에 움직임 반영
+void move_tail_nightgame(int p, int nx, int ny)
+{
+	back_buf[nx][ny] = back_buf[player[p].px][player[p].py];
+	back_buf[player[p].px][player[p].py] = ' ';
+	player[p].px = nx;
+	player[p].py = ny;
+}

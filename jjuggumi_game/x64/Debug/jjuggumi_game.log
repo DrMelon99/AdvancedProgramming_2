@@ -1,3 +1,2 @@
-﻿  jjuggumi.c
-D:\git\AdvancedProgramming_2\jjuggumi_game\source\jjuggumi.c(28,7): warning C4101: 'start_option' :참조되지 않은 지역 변수입니다.
+﻿  canvas.c
   jjuggumi_game.vcxproj -> D:\git\AdvancedProgramming_2\jjuggumi_game\x64\Debug\jjuggumi_game.exe

@@ -42,6 +42,7 @@ int jjuggumi_init(void)
 	}
 
 	fscanf_s(fp, "%d", &n_player);
+	n_alive = n_player;
 
 	// 파일에서 각 스탯 읽기
 	for (int i = 0; i < n_player; i++)
@@ -97,18 +98,6 @@ int jjuggumi_init(void)
 		printf("아이템 이름: %s\n지능 버프: %d\n힘 버프: %d\n스태미나 버프: %d\n\n", item[i].name, item[i].intel_buf, item[i].str_buf, item[i].stamina_buf);
 	}*/
 	
-
-	//do
-	//{
-	//	printf("플레이어 수 (1~10): ");
-	//	scanf_s("%d", &n_player); // 플레이어 수 입력 받기
-
-	//} while (n_player < 2 || n_player > 10);
-	//
-
-	//n_alive = n_alivepost = n_player; // 살아남은 플레이어 수를 입력받은 플레이어 수로 초기화
-
-	// 입력받은 n명의 플레이어들을 모두 true(살아있음)로 지정
 	for (int i = 0; i < n_player; i++)
 	{
 		player[i].is_alive = true;

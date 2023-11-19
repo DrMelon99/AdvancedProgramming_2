@@ -26,6 +26,8 @@ void gotoxy(int x, int y);
 void printxy(char ch, int row, int col);
 void draw(void);
 void print_status(void);
-void dialog(int opt, int left_s);
+void memory_front_buf(void);
+void restore_front_buf(void);
+void dialog(int opt);
 
 #endif
