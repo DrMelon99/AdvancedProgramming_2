@@ -22,12 +22,15 @@ bool player_statuspost[PLAYER_MAX];
 int player_outlist[PLAYER_MAX];
 int n_player, n_alive, n_alivepost; // 플레이어 수, 살아남은 플레이어 수, 이전 대조값
 int n_item;
-
-int tick;  // 시계
+int game_round;
+int debug_i, debug_j, debug_k;
+int tick[2];  // 시계
 int pass_n_player;
 
 typedef struct {
+	int id;
 	char name[100]; // 아이템 이름
+	bool getable; // 아이템 소유 가능 여부
 	int ix, iy; // 아이템 좌표 x,y
 	int intel_buf, str_buf, stamina_buf; // 아이템의 지능, 힘, 스태미나 증가 능력치
 } ITEM;

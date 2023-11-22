@@ -27,7 +27,7 @@ void mugunghwa(void)
 		// 다른 NPC 랜덤 움직임 작동
 		for (int i = 1; i < n_player; i++)
 		{
-			if (tick % player[i].period == 0)
+			if (tick[0] % player[i].period == 0)
 			{
 				move_random_mugunghwa(i, -1);
 			}
@@ -35,7 +35,7 @@ void mugunghwa(void)
 
 		display();
 		Sleep(10);
-		tick += 10;
+		tick[0] += 10;
 	}
 }
 
@@ -72,21 +72,21 @@ void mugunghwa_init(void)
 		back_buf[player[i].px][player[i].py] = '0' + i;  // (0 .. n_player-1)
 	}
 
-	tick = 0;
+	tick[0] = 0;
 }
 
 void younghee(void)
 {
 	int ment = 0;
 
-	if (tick < 6600)
+	if (tick[0] < 6600)
 	{
 		for (int i = 0; i < 3; i++) // 영희 '#'
 		{
 			back_buf[6 + i][1] = '#';
 		}
 
-		switch (tick / 100)
+		switch (tick[0] / 100)
 		{
 		case 5:
 			while (ment < 3)
@@ -174,7 +174,7 @@ void younghee(void)
 		}
 
 		yh_killmode = false;
-		tick = 0; // 틱 초기화
+		tick[0] = 0; // 틱 초기화
 		count++;
 	}
 }

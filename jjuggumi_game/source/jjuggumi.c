@@ -11,6 +11,11 @@
 
 int main(void)
 {
+	CONSOLE_CURSOR_INFO cursorInfo = { 0, };
+	cursorInfo.dwSize = 1; //커서 굵기 (1 ~ 100)
+	cursorInfo.bVisible = FALSE; //커서 Visible TRUE(보임) FALSE(숨김)
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
+
 	jjuggumi_init();
 	// intro(); // 쭈꾸미 게임 인트로
 	// mugunghwa(); // 무궁화 꽃이 피었습니다
@@ -80,7 +85,11 @@ int jjuggumi_init(void)
 
 	// 아이템 데이터 load
 	fscanf_s(fp, "%d", &n_item);
-	for (int i = 0; i < n_item; i++) {
+
+	for (int i = 0; i < n_item; i++)
+	{
+		item[i].id = i;
+		item[i].getable = true;
 		fscanf_s(fp, "%s%d%d%d",
 			item[i].name, (unsigned int)sizeof(item[i].name),
 			&(item[i].intel_buf),
@@ -103,7 +112,7 @@ int jjuggumi_init(void)
 		player[i].is_alive = true;
 	}
 
-	tick = 0;
+	tick[0] = 0;
 
 	/*system("cls");*/
 

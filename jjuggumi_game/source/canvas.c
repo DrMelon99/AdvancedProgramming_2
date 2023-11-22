@@ -63,10 +63,10 @@ void display(void)
 	print_status();
 }
 
-// 다이얼로그 출력
+// 변경점이 있는 맵 좌표에 출력
 void draw(void)
 {
-	for (int row = 0; row < N_ROW; row++) // 무궁화 꽃이 피었습니다 출력을 위해 임의로 N_ROW에 + 1
+	for (int row = 0; row < N_ROW + 1; row++) // 무궁화 꽃이 피었습니다 출력을 위해 임의로 N_ROW에 + 1
 	{
 		for (int col = 0; col < N_COL; col++)
 		{
@@ -79,6 +79,7 @@ void draw(void)
 	}
 }
 
+// 상태 출력
 void print_status(void)
 {
 	printf("no. of players left: %2d\n", n_alive);
@@ -87,10 +88,16 @@ void print_status(void)
 
 	for (int p = 0; p < n_player; p++)
 	{
-		printf("player%2d: %s\t %d(+%d)\t%d(+%d)\t%d%%\n", p, player[p].is_alive ? "ALIVE" : "DEAD", player[p].intel, player[p].item.intel_buf, player[p].str, player[p].item.str_buf, player[p].stamina);
+		printf("player%2d: %s\t %2d(%+2d)\t%2d(%+2d)\t%3d%%\titem :%d [%d]\n", p, player[p].is_alive ? "ALIVE" : "DEAD", player[p].intel, player[p].item.intel_buf, player[p].str, player[p].item.str_buf, player[p].stamina, player[p].hasitem, player[p].item.id);
 	}
 
-	printf("Play time: %ds", tick/1000);
+	for (int i = 0; i < n_item; i++) // 디버그 창
+	{
+		printf("Item id: %d\tGetable: %d\tX: %02d\tY: %02d\n", item[i].id, item[i].getable, item[i].ix, item[i].iy);
+	}
+
+	printf("Play time: %03ds", tick[0] / 1000);
+	printf("\nX:%02d Y:%02d", player[0].px, player[0].py);
 }
 
 // ★ 현재 맵을 temp 버퍼에 임시 저장
@@ -100,7 +107,7 @@ void memory_front_buf(void)
 	{
 		for (int j = 0; j < N_COL; j++)
 		{
-			temp_buf[i][j] = front_buf[i][j];
+			temp_buf[i][j] = back_buf[i][j];
 		}
 	}
 }
@@ -117,21 +124,24 @@ void restore_front_buf(void)
 	}
 }
 
+// ♨ 다이얼로그 출력
 void dialog(int opt)
 {
 	char time_ment[24] = "Game starts in n seconds"; // 'n' = 15
 	char start_ment[16] = "!! GAME START !!";
-	char out_ment[] = "PLAYER OUT !!";
+	char out_ment[16] = "!! PLAYER OUT !!";
+	char item_exchange[26] = "Want to exchange an item??";
+	char select_ment[17] = "(SPACE to Select)";
+	char fight[30] = "Do you want to fight Player n?";
 
 	int Dialog_start_ROW;
 	int Dialog_start_COL;
 
 	memory_front_buf();
 
+	
 	if (opt == 0) // 카운트 다운 다이얼로그
 	{
-		restore_front_buf();
-
 		for (int t = 4; t > -2; t--)
 		{
 			Dialog_start_ROW = (N_ROW - 6) / 2;
@@ -192,121 +202,76 @@ void dialog(int opt)
 				display();
 			}
 		}
+		restore_front_buf();
 	}
-	else if (opt == 1) // 탈락자 멘트 다이얼로그
+	else if (opt == 1) // "무궁화 꽃이 피었습니다" 탈락자 멘트 다이얼로그
 	{
 
 	}
-	else if (opt == 2) // 추가기능 예정
+	else if (opt == 2) // "야간운동" 0번 플레이어, 아이템 습득 여부
 	{
+		Dialog_start_ROW = (N_ROW - 8) / 2;
+		Dialog_start_COL = (N_COL / 2) - 14;
 
+		for (int i = 0; i < 9; i++)
+		{
+			for (int j = 0; j < 30; j++)
+			{
+				back_buf[Dialog_start_ROW + i][Dialog_start_COL + j] = ' ';
+				if (i == 0 || i == 8 || j == 0 || j == 29)
+				{
+					back_buf[Dialog_start_ROW + i][Dialog_start_COL + j] = '+';
+				}
+				else if (i == 2 && j > 1 && j < 28)
+				{
+					back_buf[Dialog_start_ROW + i][Dialog_start_COL + j] = item_exchange[j - 2];
+				}
+				else if (i == 3 && j > 5 && j < 23)
+				{
+					back_buf[Dialog_start_ROW + i][Dialog_start_COL + j] = select_ment[j - 6];
+				}
+				back_buf[Dialog_start_ROW + 5][Dialog_start_COL + 8] = 'Y';
+				back_buf[Dialog_start_ROW + 5][Dialog_start_COL + 21] = 'N';
+			}
+		}
+
+		get_item = true;
+
+		while (1)
+		{
+			key_t key = get_key();
+
+			if (key == K_LEFT)
+			{
+				get_item = true;
+			}
+			else if (key == K_RIGHT)
+			{
+				get_item = false;
+			}
+			else if (key == K_SPACE)
+			{
+				break;
+			}
+			back_buf[Dialog_start_ROW + 6][Dialog_start_COL + 8] = ' ';
+			back_buf[Dialog_start_ROW + 6][Dialog_start_COL + 21] = ' ';
+
+			if (get_item)
+			{
+				back_buf[Dialog_start_ROW + 6][Dialog_start_COL + 8] = '^';
+			}
+			else
+			{
+				back_buf[Dialog_start_ROW + 6][Dialog_start_COL + 21] = '^';
+			}
+			display();
+			Sleep(10);
+		}
+		restore_front_buf();
+		display();
 	}
-
-	//// '=' 다이얼 박스 생성
-	//for (int i = 0; i < 33; i++)
-	//{
-	//	for (int j = 0; j < 5; j++)
-	//	{
-	//		back_buf[Center_ROW + j][Center_COL + i] = '=';
-	//	}
-	//}
-	//
-	//// 다이얼 박스 공백 생성
-	//for (int i = 1; i < 32 ; i++)
-	//{
-	//	for (int j = 1; j < 4; j++)
-	//	{
-	//		back_buf[Center_ROW + j][Center_COL + i] = ' ';
-	//	}
-	//}
-
-	//if (left_s > 0)
-	//{
-	//	// 멘트 출력
-	//	if (opt == 0) // 남은 초 멘트
-	//	{
-	//		for (int i = 0; i < 15; i++)
-	//		{
-	//			back_buf[Center_ROW + 2][Center_COL + 4] = left_s + 48; // 초 
-	//			back_buf[Center_ROW + 2][Center_COL + 6 + i] = time_ment[i]; // + 멘트
-	//		}
-	//		display();
-	//		Sleep(1000);
-	//	}
-	//	else if (opt == 1) // 탈락자 멘트
-	//	{
-	//		for (int i = 0; i < N_ROW; i++) // 화면 잠시 복사
-	//		{
-	//			for (int j = 0; j < N_COL; j++)
-	//			{
-	//				temp_buf[i][j] = front_buf[i][j];
-	//			}
-	//		}
-
-	//		for (int i = 0 ; i < 15; i++)
-	//		{
-	//			for (int j = 0 ; j < n_player - n_alive ; j++)
-	//			{
-	//				if (player_outlist[j] != 'v')
-	//				{
-	//					back_buf[Center_ROW + 2][Center_COL + 4 + j] = player_outlist[j] + 48; // 플레이어
-	//				}
-	//			}
-	//			back_buf[Center_ROW + 2][Center_COL + 6 + n_player - n_alive + i] = out_ment[i]; // + 멘트
-	//		}
-	//		display();
-	//		Sleep(3000);
-
-	//		for (int i = 0; i < 33; i++)
-	//		{
-	//			for (int j = 0; j < 5; j++)
-	//			{
-	//				back_buf[Center_ROW + j][Center_COL + i] = '.';
-	//			}
-	//		}
-	//		display();
-	//		for (int i = 0; i < 33; i++)
-	//		{
-	//			for (int j = 0; j < 5; j++)
-	//			{
-	//				back_buf[Center_ROW + j][Center_COL + i] = ' ';
-	//			}
-	//		}
-
-	//		for (int i = 0; i < N_ROW; i++) // 화면 복구
-	//		{
-	//			for (int j = 0; j < N_COL; j++)
-	//			{
-	//				back_buf[i][j] = temp_buf[i][j];
-	//			}
-	//		}
-	//		display();
-	//	}
-	//}
-	//else // 타이머 0
-	//{
-	//	display();
-	//	for (int i = 0; i < 16 ; i++)
-	//	{
-	//		back_buf[Center_ROW + 2][Center_COL + 5 + i] = start_ment[i]; // 게임 시작 멘트
-	//	}
-
-	//	display();
-	//	Sleep(1000);
-
-	//	for (int i = 0; i < 16; i++)
-	//	{
-	//		back_buf[Center_ROW + 2][Center_COL + 4 + i] = '.';
-	//	}
-	//	display();
-
-	//	for (int i = 0; i < 33; i++)
-	//	{
-	//		for (int j = 0; j < 5; j++)
-	//		{
-	//			back_buf[Center_ROW + j][Center_COL + i] = ' ';
-	//		}
-	//	}
-	//	display();
-	//}
+	else if (opt == 3) // "야간운동" 0번 플레이어, 다른 플레이어와 인접칸 상호작용 
+	{
+		// <강탈 / 회유 / 무시>
+	}
 }

@@ -12,7 +12,7 @@ void juldarigi(void)
 
 		display();
 		Sleep(10);
-		tick += 10;
+		tick[0] += 10;
 	}
 
 }

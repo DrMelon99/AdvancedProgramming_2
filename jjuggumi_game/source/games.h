@@ -19,8 +19,9 @@
 #define TIMER_MENT "초 후 게임시작"
 #define MUGUNWHA_MENT "무 궁 화 꽃 이 피 었 습 니 다"
 
-bool yh_killmode;
+bool yh_killmode, get_item;
 int count;
+int x, y;
 
 void move_random(int player, int dir);
 void move_manual(key_t key);
@@ -28,6 +29,9 @@ void move_tail(int player, int nx, int ny);
 
 void move_random_mugunghwa(int player, int dir);
 void move_tail_mugunghwa(int player, int nx, int ny);
+
+void move_random_nightgame(int p, int dir);
+void move_tail_nightgame(int p, int nx, int ny);
 
 void mugunghwa(void);
 void nightgame(void);
@@ -41,5 +45,7 @@ void jebi_init(void);
 
 
 void younghee(void);
+
+void player_stamina(int p, int opt);
 
 #endif

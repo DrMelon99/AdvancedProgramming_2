@@ -33,7 +33,7 @@ void sample_init(void) {
 		back_buf[px[i]][py[i]] = '0' + i;  // (0 .. n_player-1)
 	}
 
-	tick = 0;
+	tick[0] = 0;
 }
 
 
@@ -60,13 +60,13 @@ void sample(void) {
 
 		// player 1 부터는 랜덤으로 움직임(8방향)
 		for (int i = 1; i < n_player; i++) {
-			if (tick % period[i] == 0) {
+			if (tick[0] % period[i] == 0) {
 				move_random(i, -1);
 			}
 		}
 
 		display();
 		Sleep(10);
-		tick += 10;
+		tick[0] += 10;
 	}
 }

@@ -155,6 +155,7 @@ void move_random_nightgame(int p, int dir)
 	} while (!placable(nx, ny));
 
 	move_tail_nightgame(p, nx, ny);
+	player[p].stamina--;
 }
 
 // ★ back_buf[][]에 움직임 반영
@@ -164,4 +165,22 @@ void move_tail_nightgame(int p, int nx, int ny)
 	back_buf[player[p].px][player[p].py] = ' ';
 	player[p].px = nx;
 	player[p].py = ny;
+}
+
+// ★ 플레이어 스태미나 회복 관련
+void player_stamina(int p, int opt)
+{
+	if (opt == 0) // 라운드 종료
+	{
+		player[p].stamina += randint(40, 50);
+
+		if (player[p].stamina > 100)
+		{
+			player[p].stamina = 100;
+		}
+	}
+	else if (opt == 1) // 아이템 획득
+	{
+		player[p].stamina = 100;
+	}
 }
