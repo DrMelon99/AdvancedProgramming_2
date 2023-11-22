@@ -34,20 +34,24 @@ void nightgame(void)
 			}
 		}
 
+		for (int i = 0; i < n_item; i++)
+		{
+			// getable 여부에 따른 아이템 시각화
+			if (item[i].getable == true)
+			{
+				back_buf[item[i].ix][item[i].iy] = 'I';
+			}
+			else if (back_buf[item[i].ix][item[i].iy] == 'I')
+			{
+				back_buf[item[i].ix][item[i].iy] = ' ';
+			}
+		}
+
 		for (int i  = 0; i < n_player; i++)
 		{
+			player_stamina(i, -1, -1);
 			for (int j = 0; j < n_item; j++)
 			{
-				// getable 여부에 따른 아이템 시각화
-				if (item[j].getable == true)
-				{
-					back_buf[item[j].ix][item[j].iy] = 'I';
-				}
-				else if (back_buf[item[j].ix][item[j].iy] == 'I')
-				{
-					back_buf[item[j].ix][item[j].iy] = ' ';
-				}
-
 				// 플레이어 인접 칸 탐색 (상.하.좌.우) (대각선 포함 X)
 				if ((item[j].getable == true) &&
 					((((player[i].px + 1) == (item[j].ix)) && ((player[i].py + 0) == (item[j].iy))) ||
@@ -88,7 +92,7 @@ void nightgame(void)
 							player[i].item = item[j];
 							item[j].getable = false;
 
-							player_stamina(i, 1);
+							player_stamina(i, 1, player[i].item.stamina_buf);
 						}
 						else // 아이템 무시
 						{
@@ -109,9 +113,56 @@ void nightgame(void)
 						player[i].item = item[j];
 						item[j].getable = false;
 						player[i].hasitem = true;
-						player_stamina(i, 1);
+						player_stamina(i, 1, player[i].item.stamina_buf);
 					}
 					debug_k++;
+				}
+			}
+			for (int j = i + 1; j < n_player; j++)
+			{
+				if ((player[j].is_alive == true) &&
+					((((player[i].px + 1) == (player[j].px)) && ((player[i].py + 0) == (player[j].py))) ||
+					(((player[i].px + 0) == (player[j].px)) && ((player[i].py + 1) == (player[j].py))) ||
+					(((player[i].px - 1) == (player[j].px)) && ((player[i].py + 0) == (player[j].py))) ||
+					(((player[i].px + 0) == (player[j].px)) && ((player[i].py - 1) == (player[j].py)))))
+				{
+					if (i == 0)
+					{
+						dialog(3);
+					}
+					else
+					{
+						fight = randint(0, 2);
+					}
+
+					if (fight == 0)
+					{
+
+					}
+
+					/*if ((player[i].hasitem == false) && (player[j].hasitem == true))
+					{
+						if (fight == 0)
+						{
+							if ()
+						}
+						else if (fight == 1)
+						{
+
+						}
+						else
+						{
+
+						}
+					}
+					else if ((player[i].hasitem == true) && (player[j].hasitem == false))
+					{
+
+					}
+					else
+					{
+
+					}*/
 				}
 			}
 		}
@@ -153,7 +204,7 @@ void nightgame_init(void)
 
 		player[j].px = x;
 		player[j].py = y;
-		player[j].period = randint(100, 300);
+		player[j].period = randint(100, 200);
 
 		back_buf[player[j].px][player[j].py] = '0' + j;  // (0 .. n_player-1)
 	}
@@ -168,7 +219,6 @@ void nightgame_init(void)
 
 		item[j].ix = x;
 		item[j].iy = y;
-		back_buf[item[j].ix][item[j].iy] = 'I';
 	}
 
 	tick[0] = 0;

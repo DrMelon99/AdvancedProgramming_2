@@ -19,7 +19,7 @@
 #define TIMER_MENT "초 후 게임시작"
 #define MUGUNWHA_MENT "무 궁 화 꽃 이 피 었 습 니 다"
 
-bool yh_killmode, get_item;
+bool yh_killmode, get_item, fight;
 int count;
 int x, y;
 
@@ -46,6 +46,6 @@ void jebi_init(void);
 
 void younghee(void);
 
-void player_stamina(int p, int opt);
+void player_stamina(int p, int opt, int stamina_up);
 
 #endif

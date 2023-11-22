@@ -167,20 +167,24 @@ void move_tail_nightgame(int p, int nx, int ny)
 	player[p].py = ny;
 }
 
-// ★ 플레이어 스태미나 회복 관련
-void player_stamina(int p, int opt)
+// ★ 플레이어 스태미나 관련
+void player_stamina(int p, int opt, int stamina_up)
 {
 	if (opt == 0) // 라운드 종료
 	{
 		player[p].stamina += randint(40, 50);
-
-		if (player[p].stamina > 100)
-		{
-			player[p].stamina = 100;
-		}
 	}
 	else if (opt == 1) // 아이템 획득
 	{
+		player[p].stamina += stamina_up;
+	}
+
+	if (player[p].stamina > 100)
+	{
 		player[p].stamina = 100;
+	}
+	else if (player[p].stamina < 0)
+	{
+		player[p].stamina = 0;
 	}
 }
