@@ -19,7 +19,8 @@
 #define TIMER_MENT "초 후 게임시작"
 #define MUGUNWHA_MENT "무 궁 화 꽃 이 피 었 습 니 다"
 
-bool yh_killmode, get_item, fight;
+bool yh_killmode, get_item;
+int fight[3]; // 1: 싸움 형태, 2: 강탈 결과, 3: 회유 결과
 int count;
 int x, y;
 

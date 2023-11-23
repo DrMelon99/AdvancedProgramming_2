@@ -33,6 +33,7 @@ void sample_init(void) {
 		back_buf[px[i]][py[i]] = '0' + i;  // (0 .. n_player-1)
 	}
 
+	
 	tick[0] = 0;
 }
 

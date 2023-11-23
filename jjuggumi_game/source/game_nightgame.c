@@ -50,10 +50,11 @@ void nightgame(void)
 		for (int i  = 0; i < n_player; i++)
 		{
 			player_stamina(i, -1, -1);
+
+			// 플레이어 인접 칸 아이템 탐색 (상.하.좌.우) (대각선 포함 X)
 			for (int j = 0; j < n_item; j++)
 			{
-				// 플레이어 인접 칸 탐색 (상.하.좌.우) (대각선 포함 X)
-				if ((item[j].getable == true) &&
+				if ((tick[0] - player[i].interact_timestamp > 1000) && (item[j].getable == true) &&
 					((((player[i].px + 1) == (item[j].ix)) && ((player[i].py + 0) == (item[j].iy))) ||
 					(((player[i].px + 0) == (item[j].ix)) && ((player[i].py + 1) == (item[j].iy))) ||
 					(((player[i].px - 1) == (item[j].ix)) && ((player[i].py + 0) == (item[j].iy))) ||
@@ -74,38 +75,29 @@ void nightgame(void)
 						{
 							for (int k = 0; k < n_item; k++)
 							{
-								if (player[i].item.id == item[k].id)
+								if (item[k].id == player[i].item.id)
 								{
+									x = item[k].ix;
+									y = item[k].iy;
+
+;									item[k].ix = item[j].ix;
+									item[k].iy = item[j].iy;
+
+									item[j].ix = x;
+									item[j].iy = y;
+
 									item[k].getable = true;
-
-									do // 아이템을 교환 후 내려놓은 아이템의 위치를 재조정
-									{
-										x = randint(1, N_ROW - 2);
-										y = randint(1, N_COL - 2);
-									} while (!placable(x, y));
-
-									item[k].ix = x;
-									item[k].iy = y;
 								}
 							}
 
 							player[i].item = item[j];
 							item[j].getable = false;
-
+							player[i].interact_timestamp = tick[0];
 							player_stamina(i, 1, player[i].item.stamina_buf);
 						}
 						else // 아이템 무시
 						{
-							back_buf[item[j].ix][item[j].iy] = ' ';
-
-							do // 아이템의 위치를 재조정
-							{
-								x = randint(1, N_ROW - 2);
-								y = randint(1, N_COL - 2);
-							} while (!placable(x, y));
-
-							item[j].ix = x;
-							item[j].iy = y;
+							player[i].interact_timestamp = tick[0];
 						}
 					}
 					else // 플레이어가 아이템을 가지고 있지 않다면
@@ -113,12 +105,15 @@ void nightgame(void)
 						player[i].item = item[j];
 						item[j].getable = false;
 						player[i].hasitem = true;
+						player[i].interact_timestamp = tick[0];
 						player_stamina(i, 1, player[i].item.stamina_buf);
 					}
 					debug_k++;
 				}
 			}
-			for (int j = i + 1; j < n_player; j++)
+
+			// 플레이어 인접 칸 아이템 탐색 (상.하.좌.우) (대각선 포함 X)
+			/*for (int j = i + 1; j < n_player; j++)
 			{
 				if ((player[j].is_alive == true) &&
 					((((player[i].px + 1) == (player[j].px)) && ((player[i].py + 0) == (player[j].py))) ||
@@ -132,39 +127,57 @@ void nightgame(void)
 					}
 					else
 					{
-						fight = randint(0, 2);
+						fight[0] = randint(0, 2);
 					}
 
-					if (fight == 0)
+					if ((player[i].hasitem == false) && (player[j].hasitem == true))
 					{
-
-					}
-
-					/*if ((player[i].hasitem == false) && (player[j].hasitem == true))
-					{
-						if (fight == 0)
+						if((player[i].intel+player[i].item.intel_buf))
+						if (fight[0] == 0) // 강탈
 						{
 							if ()
 						}
-						else if (fight == 1)
+						else if (fight[0] == 1) // 회유
 						{
 
 						}
-						else
+						else // 무시
 						{
 
 						}
 					}
 					else if ((player[i].hasitem == true) && (player[j].hasitem == false))
 					{
+						if (fight[0] == 0) // 강탈
+						{
+							if ()
+						}
+						else if (fight[0] == 1) // 회유
+						{
 
+						}
+						else // 무시
+						{
+
+						}
 					}
-					else
+					else if ((player[i].hasitem == true) && (player[j].hasitem == true))
 					{
+						if (fight[0] == 0) // 강탈 (교환)
+						{
+							if ()
+						}
+						else if (fight[0] == 1) // 회유 (교환)
+						{
 
-					}*/
+						}
+						else // 무시
+						{
+
+						}
+					}
 				}
-			}
+			}*/
 		}
 		display();
 		Sleep(10);
@@ -184,6 +197,11 @@ void nightgame(void)
 void nightgame_init(void)
 {
 	debug_i = debug_j = debug_k = 0;
+
+	for (int i = 0; i < n_player; i++)
+	{
+
+	}
 
 	game_round = 2;
 

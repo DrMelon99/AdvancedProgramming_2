@@ -44,7 +44,7 @@ typedef struct {
 	char name[100]; // 플레이어 이름
 	int intel, str, stamina; // 플레이어 지능, 힘, 스태미나
 	bool is_alive, hasitem; // 플레이어 생존 여부, 아이템 소지여부
-	int interact_cooltime; // 상호작용 쿨타임
+	int interact_timestamp; // 상호작용 쿨타임
 	ITEM item; // 플레이어가 가지고 있는 아이템 정보
 } PLAYER;
 
