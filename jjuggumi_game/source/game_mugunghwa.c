@@ -4,12 +4,15 @@ void mugunghwa(void)
 {
 	mugunghwa_init();
 
-	display();
-
 	dialog(0, -1);
 
 	while (1)
 	{
+		if (player_control())
+			break;
+
+		npc_move_mugunghwa();
+
 		// 영희의 "무궁화 꽃이 피었습니다" 말하기 및 상태 전환
 		younghee();
 
@@ -21,7 +24,7 @@ void mugunghwa(void)
 		}
 		else if (key != K_UNDEFINED)
 		{
-			move_manual(key);
+			player_control(key);
 		}
 
 		// 다른 NPC 랜덤 움직임 작동
@@ -29,7 +32,7 @@ void mugunghwa(void)
 		{
 			if (tick[0] % player[i].period == 0)
 			{
-				move_random_mugunghwa(i, -1);
+				npc_move_mugunghwa(i, -1);
 			}
 		}
 
@@ -37,10 +40,14 @@ void mugunghwa(void)
 		Sleep(10);
 		tick[0] += 10;
 	}
+
+	player_stamina(-1, 0, -1);
 }
 
 void mugunghwa_init(void)
 {
+	game_round = 1;
+
 	system("cls");
 
 	SetConsoleFontSize(20);
@@ -81,109 +88,7 @@ void mugunghwa_init(void)
 		back_buf[player[i].px][player[i].py] = '0' + i;  // (0 .. n_player-1)
 	}
 
+	display();
+
 	tick[0] = 0;
-}
-
-void younghee(void)
-{
-	int ment = 0;
-
-	if (tick[0] < 6600)
-	{
-		for (int i = 0; i < 3; i++) // 영희 '#'
-		{
-			back_buf[6 + i][1] = '#';
-		}
-
-		switch (tick[0] / 100)
-		{
-		case 5:
-			while (ment < 3)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		case 15:
-			while (ment < 6)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		case 25:
-			while (ment < 9)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		case 35:
-			while (ment < 12)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		case 45:
-			while (ment < 15)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		case 52:
-			while (ment < 18)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		case 57:
-			while (ment < 21)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		case 60:
-			while (ment < 24)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		case 63:
-			while (ment < 27)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		case 65:
-			while (ment < 30)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		}
-	}
-	else if (tick > 6600 && tick < 9000)
-	{
-		yh_killmode = true;
-
-		for (int i = 0; i < 3; i++) // 영희 '@'
-		{
-			back_buf[6 + i][1] = '@';
-		}
-	}
-	else if (tick > 9000) // 패배자 출력
-	{
-		// 탈락자 검색
-		if (n_alivepost != n_alive)
-		{
-			n_alivepost = n_alive; // 이전값과 동기화
-
-			for (int i = 0; i < n_player; i++)
-			{
-				player_outlist[i] = 'v';
-			}
-
-			for (int i = 0, j = 0; i < n_player; i++)
-			{
-				if (player_statuspost[i] != player[i].is_alive)
-				{
-					player_statuspost[i] = player[i].is_alive;
-					player_outlist[j++] = i;
-				}
-			}
-
-			dialog(1, -1);
-		}
-
-		for (int i = 0; i < 30; i++) // 무궁화 멘트 지우기
-		{
-			back_buf[15][i] = '.';
-		}
-		display();
-		for (int i = 0; i < 30; i++)
-		{
-			back_buf[15][i] = ' ';
-		}
-
-		yh_killmode = false;
-		tick[0] = 0; // 틱 초기화
-		count++;
-	}
 }

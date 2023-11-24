@@ -6,7 +6,7 @@
 
 
 void sample_init(void);
-void move_manual(key_t key);
+void player_control(key_t key);
 void move_random(int i, int dir);
 void move_tail(int i, int nx, int ny);
 
@@ -56,7 +56,7 @@ void sample(void) {
 			break;
 		}
 		else if (key != K_UNDEFINED) {
-			move_manual(key);
+			player_control(key);
 		}
 
 		// player 1 부터는 랜덤으로 움직임(8방향)

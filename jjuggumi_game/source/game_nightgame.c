@@ -4,34 +4,14 @@ void nightgame(void)
 {
 	nightgame_init();
 
-	display();
+	dialog(0, -1);
 
-	// dialog(0, -1); // 카운트 다운 다이얼로그
-
-	while (1)
+	while (1) // 게임 진행 루프
 	{
-		// 0번 플레이어 움직임 정의
-		key_t key = get_key();
-		if (key == K_QUIT)
-		{
+		if (player_control())
 			break;
-		}
-		else if (key != K_UNDEFINED)
-		{
-			if (key != K_SPACE)
-			{
-				move_manual(key);
-			}
-		}
-
-		// 그외 플레이어 움직임 정의
-		for (int i = 1; i < n_player; i++)
-		{
-			if (tick[0] % player[i].period == 0)
-			{
-				move_random_nightgame(i, -1);
-			}
-		}
+		
+		npc_move_nightgame();
 
 		player_visable();
 
@@ -39,8 +19,6 @@ void nightgame(void)
 
 		for (int i  = 0; i < n_player; i++)
 		{
-			player_stamina(i, -1, -1);
-
 			// 플레이어 인접 칸 아이템 탐색 (상.하.좌.우) (대각선 포함 X)
 			for (int j = 0; j < n_item; j++)
 			{
@@ -143,11 +121,11 @@ void nightgame(void)
 								player[j].item = item_temp;
 								player[i].hasitem = true;
 								player[j].hasitem = false;
-								player[i].stamina -= 40;
+								player_stamina(i, 1, player[i].item.stamina_buf - 40);
 							}
 							else
 							{
-								player[i].stamina -= 60;
+								player_stamina(i, 1, -60);
 							}
 						}
 						else if (fight = 1) // 회유
@@ -160,14 +138,13 @@ void nightgame(void)
 								player[j].item = item_temp;
 								player[i].hasitem = true;
 								player[j].hasitem = false;
-								player[i].stamina -= 20;
+								player_stamina(i, 1, player[i].item.stamina_buf - 20);
 							}
 							else
 							{
-								player[i].stamina -= 40;
+								player_stamina(i, 1, -40);
 							}
 						}
-						// player[i].interact_timestamp = tick[0];
 					}
 					else if (player[i].hasitem == true && player[j].hasitem == false)
 					{
@@ -176,7 +153,7 @@ void nightgame(void)
 							if ((player[i].str + player[i].item.str_buf) * (player[i].stamina / 100) >
 								(player[j].str + player[j].item.str_buf) * (player[j].stamina / 100))
 							{
-								player[j].stamina -= 60;
+								player_stamina(j, 1, -60);
 							}
 							else
 							{
@@ -185,7 +162,7 @@ void nightgame(void)
 								player[i].item = item_temp;
 								player[j].hasitem = true;
 								player[i].hasitem = false;
-								player[j].stamina -= 40;
+								player_stamina(j, 1, player[j].item.stamina_buf - 40);
 							}
 						}
 						else if (fight = 1) // 회유
@@ -193,7 +170,7 @@ void nightgame(void)
 							if ((player[i].intel + player[i].item.intel_buf) * (player[i].stamina / 100) >
 								(player[j].intel + player[j].item.intel_buf) * (player[j].stamina / 100))
 							{
-								player[j].stamina -= 40;
+								player_stamina(j, 1, -40);
 							}
 							else
 							{
@@ -202,10 +179,9 @@ void nightgame(void)
 								player[i].item = item_temp;
 								player[j].hasitem = true;
 								player[i].hasitem = false;
-								player[j].stamina -= 20;
+								player_stamina(j, 1, player[j].item.stamina_buf - 20);
 							}
 						}
-						// player[j].interact_timestamp = tick[0];
 					}
 					else if (player[i].hasitem == true && player[j].hasitem == true)
 					{
@@ -219,11 +195,11 @@ void nightgame(void)
 									item_temp = player[i].item;
 									player[i].item = player[j].item;
 									player[j].item = item_temp;
-									player[i].stamina -= 40;
+									player_stamina(i, 1, player[i].item.stamina_buf - 40);
 								}
 								else
 								{
-									player[i].stamina -= 60;
+									player_stamina(i, 1, -60);
 								}
 							}
 							else if (fight = 1) // 회유
@@ -234,14 +210,13 @@ void nightgame(void)
 									item_temp = player[i].item;
 									player[i].item = player[j].item;
 									player[j].item = item_temp;
-									player[i].stamina -= 20;
+									player_stamina(i, 1, player[i].item.stamina_buf - 20);
 								}
 								else
 								{
-									player[i].stamina -= 40;
+									player_stamina(i, 1, -40);
 								}
 							}
-							// player[i].interact_timestamp = tick[0];
 						}
 						else // j가 주도
 						{
@@ -250,14 +225,14 @@ void nightgame(void)
 								if ((player[i].str + player[i].item.str_buf) * (player[i].stamina / 100) >
 									(player[j].str + player[j].item.str_buf) * (player[j].stamina / 100))
 								{
-									player[j].stamina -= 60;
+									player_stamina(j, 1, -60);
 								}
 								else
 								{
 									item_temp = player[j].item;
 									player[j].item = player[i].item;
 									player[i].item = item_temp;
-									player[j].stamina -= 40;
+									player_stamina(j, 1, player[j].item.stamina_buf - 40);
 								}
 							}
 							else if (fight = 1) // 회유
@@ -265,54 +240,48 @@ void nightgame(void)
 								if ((player[i].intel + player[i].item.intel_buf) * (player[i].stamina / 100) >
 									(player[j].intel + player[j].item.intel_buf) * (player[j].stamina / 100))
 								{
-									player[j].stamina -= 40;
+									player_stamina(j, 1, -40);
 								}
 								else
 								{
 									item_temp = player[j].item;
 									player[j].item = player[i].item;
 									player[i].item = item_temp;
-									player[j].stamina -= 20;
+									player_stamina(j, 1, player[j].item.stamina_buf - 20);
 								}
 							}
-							// player[j].interact_timestamp = tick[0];
 						}
 						
 					}
 					player[i].interact_timestamp = player[j].interact_timestamp = tick[0];
 				}
 			}
+
+			// 플레이어의 스태미나가 0이면 탈락처리
+			if ((player[i].stamina == 0) && (player[i].is_alive == true))
+			{
+				n_alive--;
+				player[i].is_alive = false;
+			}
+
+
 		}
 		display();
 		Sleep(10);
 		tick[0] += 10;
 	}
 
-	for (int i = 0; i < n_player; i++)
-	{
-		player[i].stamina += randint(40, 50);
-		if (player[i].stamina > 100)
-		{
-			player[i].stamina = 100;
-		}
-	}
+	player_stamina(-1, 0, -1);
 }
 
 void nightgame_init(void)
 {
-	debug_i = debug_j = debug_k = 0;
-
-	for (int i = 0; i < n_player; i++)
-	{
-
-	}
-
 	game_round = 2;
 
 	system("cls");
 
 	SetConsoleFontSize(20);
-	system("mode con: cols=80 lines=50"); // 원래 40
+	system("mode con: cols=80 lines=50");
 
 	map_init(25, 80);
 
@@ -342,6 +311,10 @@ void nightgame_init(void)
 		item[j].ix = x;
 		item[j].iy = y;
 	}
+
+	nightgame_item_visable();
+
+	display();
 
 	tick[0] = 0;
 }

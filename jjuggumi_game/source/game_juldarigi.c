@@ -19,7 +19,10 @@ void juldarigi(void)
 
 void juldarigi_init(void)
 {
+	game_round = 3;
+
 	system("cls");
 
-
+	SetConsoleFontSize(20);
+	system("mode con: cols=80 lines=50");
 }

@@ -4,21 +4,80 @@
 #include "jjuggumi.h"
 #include "canvas.h"
 
-// ★ (zero-base) row행, col열로 커서 이동
-void gotoxy(int row, int col)
+void display(void)
 {
-	COORD pos = { col,row };
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+	draw();
+	gotoxy(N_ROW + 1, 0);  // 추가로 표시할 정보가 있으면 맵과 상태창 사이의 빈 공간에 출력
+	print_status(-1);
 }
 
-// ★ row행, col열에 ch 출력
+void draw(void)
+{
+	for (int row = 0; row < N_ROW + 1; row++) // 무궁화 꽃이 피었습니다 출력을 위해 임의로 N_ROW에 + 1
+	{
+		for (int col = 0; col < N_COL; col++)
+		{
+			if (front_buf[row][col] != back_buf[row][col])
+			{
+				front_buf[row][col] = back_buf[row][col];
+				printxy(front_buf[row][col], row, col);
+			}
+		}
+	}
+}
+
 void printxy(char ch, int row, int col)
 {
 	gotoxy(row, col);
 	printf("%c", ch);
 }
 
-// ★ 두 버퍼를를 완전히 비우고 맵의 외곽을 '*'로 구성
+void gotoxy(int row, int col)
+{
+	COORD pos = { col,row };
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+}
+
+void print_status(int data)
+{
+	if (game_round == 1) // "무궁화 꽃이 피었습니다"
+	{
+		printf("no. of Players left: %2d\n", n_alive);
+		enline(2, 40);
+		for (int p = 0; p < n_player; p++)
+		{
+			printf("Player%2d: %s\n", p, player[p].is_alive ? "ALIVE" : "DEAD");
+		}
+	}
+	else if (game_round == 2) // "야간게임"
+	{
+		printf("no. of Players left: %2d\n", n_alive);
+		enline(2, 40);
+		printf("\t\t intl\tstr\tstm\n");
+		for (int p = 0; p < n_player; p++)
+		{
+			printf("Player%2d: %s\t %2d(%+2d)\t%2d(%+2d)\t%3d%%\titem :%d [%d]\n", p, player[p].is_alive ? "ALIVE" : "DEAD ", player[p].intel, player[p].item.intel_buf, player[p].str, player[p].item.str_buf, player[p].stamina, player[p].hasitem, player[p].item.id);
+		}
+	}
+	else if (game_round == 3) // "줄다리기"
+	{
+		printf("str:\t%+d", 0);
+		enline(2, 40);
+		printf("no. of Players left: %2d\n", n_alive);
+		enline(2, 40);
+		for (int p = 0; p < n_player; p++)
+		{
+			printf("Player%2d: %s\n", p, player[p].is_alive ? "ALIVE" : "ALIVE*");
+		}
+	}
+	else if (game_round == 4) // "제비뽑기"
+	{
+		printf("[Round %d] Turn: Player %d\n", count, data);
+	}
+
+	debug();
+}
+
 void map_init(int n_row, int n_col)
 {
 	for (int i = 0; i < ROW_MAX; i++)
@@ -43,7 +102,6 @@ void map_init(int n_row, int n_col)
 	}
 }
 
-// ★ back_buf[row][col]이 이동할 수 있는 자리인지 확인하는 함수
 bool placable(int row, int col)
 {
 	if (row < 0 || row >= N_ROW ||
@@ -55,46 +113,6 @@ bool placable(int row, int col)
 	return true;
 }
 
-// ★ 상단에 맵을, 하단에는 현재 상태를 출력
-void display(void)
-{
-	draw();
-	gotoxy(N_ROW + 1, 0);  // 추가로 표시할 정보가 있으면 맵과 상태창 사이의 빈 공간에 출력
-	print_status();
-}
-
-// 변경점이 있는 맵 좌표에 출력
-void draw(void)
-{
-	for (int row = 0; row < N_ROW + 1; row++) // 무궁화 꽃이 피었습니다 출력을 위해 임의로 N_ROW에 + 1
-	{
-		for (int col = 0; col < N_COL; col++)
-		{
-			if (front_buf[row][col] != back_buf[row][col])
-			{
-				front_buf[row][col] = back_buf[row][col];
-				printxy(front_buf[row][col], row, col);
-			}
-		}
-	}
-}
-
-// 상태 출력
-void print_status(void)
-{	
-	printf("no. of players left: %2d\n", n_alive);
-	enline(2,40);
-	printf("\t\t intl\tstr\tstm\n");
-
-	for (int p = 0; p < n_player; p++)
-	{
-		printf("player%2d: %s\t %2d(%+2d)\t%2d(%+2d)\t%3d%%\titem :%d [%d]\n", p, player[p].is_alive ? "ALIVE" : "DEAD", player[p].intel, player[p].item.intel_buf, player[p].str, player[p].item.str_buf, player[p].stamina, player[p].hasitem, player[p].item.id);
-	}
-
-	debug();
-}
-
-// ★ 현재 맵을 temp 버퍼에 임시 저장
 void memory_front_buf(void)
 {
 	for (int i = 0; i < N_ROW; i++)
@@ -106,7 +124,6 @@ void memory_front_buf(void)
 	}
 }
 
-// ★ 최근에 저장했던 맵을 back 버퍼에 복원
 void restore_front_buf(void)
 {
 	for (int i = 0; i < N_ROW; i++)
@@ -118,7 +135,6 @@ void restore_front_buf(void)
 	}
 }
 
-// ♨ 다이얼로그 출력
 void dialog(int opt, int data)
 {
 	char time_ment[24] = "Game starts in n seconds"; // 'n' = 15
@@ -134,7 +150,6 @@ void dialog(int opt, int data)
 
 	memory_front_buf();
 
-	
 	if (opt == 0) // 카운트 다운 다이얼로그
 	{
 		for (int t = 4; t > -2; t--)
@@ -203,7 +218,7 @@ void dialog(int opt, int data)
 	{
 
 	}
-	else if (opt == 2) // "야간운동" 0번 플레이어, 아이템 습득 여부
+	else if (opt == 2) // "야간운동" 0번 플레이어, 아이템 습득 여부 선택 다이얼로그
 	{
 		Dialog_start_ROW = (N_ROW - 8) / 2;
 		Dialog_start_COL = (N_COL / 2) - 14;
@@ -234,20 +249,6 @@ void dialog(int opt, int data)
 
 		while (1)
 		{
-			key_t key = get_key();
-
-			if (key == K_LEFT)
-			{
-				get_item = true;
-			}
-			else if (key == K_RIGHT)
-			{
-				get_item = false;
-			}
-			else if (key == K_SPACE)
-			{
-				break;
-			}
 			back_buf[Dialog_start_ROW + 6][Dialog_start_COL + 8] = ' ';
 			back_buf[Dialog_start_ROW + 6][Dialog_start_COL + 21] = ' ';
 
@@ -259,13 +260,25 @@ void dialog(int opt, int data)
 			{
 				back_buf[Dialog_start_ROW + 6][Dialog_start_COL + 21] = '^';
 			}
+
+			key_t key = get_key();
+
+			if ((key == K_LEFT) || (key == K_RIGHT))
+			{
+				get_item = !get_item;
+			}
+			else if (key == K_SPACE)
+			{
+				break;
+			}
+
 			display();
 			Sleep(10);
 		}
 		restore_front_buf();
 		display();
 	}
-	else if (opt == 3) // "야간운동" 0번 플레이어, 다른 플레이어와 인접칸 상호작용 
+	else if (opt == 3) // "야간운동" 0번 플레이어, 인접한 다른 플레이어와 상호작용 여부 선택 다이얼로그
 	{
 		Dialog_start_ROW = (N_ROW - 10) / 2;
 		Dialog_start_COL = (N_COL / 2) - 16;
@@ -305,12 +318,9 @@ void dialog(int opt, int data)
 
 		fight = 0;
 
-		// <강탈 / 회유 / 무시>
+		// <강탈: Force / 회유: Intercept / 무시: Ignor>
 		while (1)
 		{
-			if (fight < 0) { fight = 0; }
-			if (fight > 2) { fight = 2; }
-
 			back_buf[Dialog_start_ROW + 5][Dialog_start_COL + 12] = ' ';
 			back_buf[Dialog_start_ROW + 5][Dialog_start_COL + 20] = ' ';
 			back_buf[Dialog_start_ROW + 6][Dialog_start_COL + 10] = ' ';
@@ -338,24 +348,40 @@ void dialog(int opt, int data)
 
 			if (key == K_UP)
 			{
-				fight --;
+				if (fight == 0)
+				{
+					fight = 2;
+				}
+				else
+				{
+					fight--;
+				}
 			}
 			else if (key == K_DOWN)
 			{
-				fight ++;
+				if (fight == 2)
+				{
+					fight = 0;
+				}
+				else
+				{
+					fight++;
+				}
 			}
 			else if (key == K_SPACE)
 			{
 				break;
 			}
-			back_buf[Dialog_start_ROW + 6][Dialog_start_COL + 8] = ' ';
-			back_buf[Dialog_start_ROW + 6][Dialog_start_COL + 21] = ' ';
 
 			display();
 			Sleep(10);
 		}
 		restore_front_buf();
 		display();
+	}
+	else if (opt == 4) // "제비뽑기" n번째 플레이어의 <통과 / 탈락> 판정 결과 출력 다이얼로그
+	{
+
 	}
 }
 
@@ -368,5 +394,5 @@ void debug(void)
 
 	printf("Play time: %03ds\n", tick[0] / 1000);
 	printf("Player Location -> X:%02d Y:%02d\n", player[0].px, player[0].py);
-	printf("fight: %d", fight);
+	printf("get item: %d fight: %d", get_item, fight);
 }

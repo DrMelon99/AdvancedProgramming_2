@@ -18,7 +18,10 @@ void jebi(void)
 
 void jebi_init(void)
 {
+	game_round = 4;
+
 	system("cls");
 
-
+	SetConsoleFontSize(20);
+	system("mode con: cols=80 lines=50");
 }
