@@ -52,12 +52,26 @@ void move_tail(int p, int nx, int ny)
 	player[p].py = ny;
 }
 
+void player_visable(void)
+{
+	for (int i = 0; i < n_player; i++)
+	{
+		if ((player[i].is_alive == true) && (player[i].is_pass == false))
+		{
+			back_buf[player[i].px][player[i].py] = '0' + i;
+		}
+		else
+		{
+			back_buf[player[i].px][player[i].py] = ' ';
+		}
+	}
+}
+
 // "무궁화 꽃이 피었습니다" 전용 NPC 움직임 정의
 void move_random_mugunghwa(int p, int dir)
 {
 	int nx, ny;  // 움직여서 다음에 놓일 자리
 
-	// 움직일 공간이 없는 경우는 없다고 가정(무한 루프에 빠짐)	
 	do
 	{
 		if (randint(0, 1000) < 700) // NPC 앞으로 -> 70% / 영희의 킬모드가 켜질 경우 NPC 제자리 -> 70%
@@ -155,7 +169,6 @@ void move_random_nightgame(int p, int dir)
 	} while (!placable(nx, ny));
 
 	move_tail_nightgame(p, nx, ny);
-	player[p].stamina--;
 }
 
 // ★ back_buf[][]에 움직임 반영
@@ -165,6 +178,23 @@ void move_tail_nightgame(int p, int nx, int ny)
 	back_buf[player[p].px][player[p].py] = ' ';
 	player[p].px = nx;
 	player[p].py = ny;
+}
+
+// "야간운동" 아이템 시각화
+void nightgame_item_visable(void)
+{
+	for (int i = 0; i < n_item; i++)
+	{
+		// getable 여부에 따른 아이템 시각화
+		if (item[i].getable == true)
+		{
+			back_buf[item[i].ix][item[i].iy] = 'I';
+		}
+		else if (back_buf[item[i].ix][item[i].iy] == 'I')
+		{
+			back_buf[item[i].ix][item[i].iy] = ' ';
+		}
+	}
 }
 
 // ★ 플레이어 스태미나 관련

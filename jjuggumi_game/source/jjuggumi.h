@@ -24,7 +24,9 @@ int n_player, n_alive, n_alivepost; // 플레이어 수, 살아남은 플레이어 수, 이전 �
 int n_item;
 int game_round;
 int debug_i, debug_j, debug_k;
+
 int tick[2];  // 시계
+
 int pass_n_player;
 
 typedef struct {
@@ -43,7 +45,7 @@ typedef struct {
 	int period; // 플레이어 이동주기
 	char name[100]; // 플레이어 이름
 	int intel, str, stamina; // 플레이어 지능, 힘, 스태미나
-	bool is_alive, hasitem; // 플레이어 생존 여부, 아이템 소지여부
+	bool is_alive, hasitem, is_pass; // 플레이어 생존 여부, 아이템 소지여부, 게임통과 여부
 	int interact_timestamp; // 상호작용 쿨타임
 	ITEM item; // 플레이어가 가지고 있는 아이템 정보
 } PLAYER;

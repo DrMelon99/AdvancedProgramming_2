@@ -6,7 +6,7 @@ void mugunghwa(void)
 
 	display();
 
-	dialog(0);
+	dialog(0, -1);
 
 	while (1)
 	{
@@ -48,6 +48,13 @@ void mugunghwa_init(void)
 
 	map_init(15, 60);
 
+	// 모든 플레이어 게임 통과 여부 false 초기 설정
+	for (int i = 0; i < n_player; i++)
+	{
+		player[i].is_pass = false;
+	}
+
+	// "무궁화 꽃이 피었습니다" 라운드와 통과 플레이어 수 0으로 초기화
 	count = pass_n_player = 0;
 
 
@@ -59,12 +66,14 @@ void mugunghwa_init(void)
 
 	// n명의 플레이어들을 우측 시작 지점에 랜덤 배치
 	int x, y;
-	for (int i = 0; i < n_player; i++) {
-		// 같은 자리가 나오면 다시 생성
-		do {
+	for (int i = 0; i < n_player; i++)
+	{
+		do
+		{
 			x = randint(1, N_ROW - 2);
 			y = (N_COL - 2);
 		} while (!placable(x, y));
+
 		player[i].px = x;
 		player[i].py = y;
 		player[i].period = randint(100, 500);
@@ -160,7 +169,7 @@ void younghee(void)
 				}
 			}
 
-			dialog(1, 1);
+			dialog(1, -1);
 		}
 
 		for (int i = 0; i < 30; i++) // 무궁화 멘트 지우기

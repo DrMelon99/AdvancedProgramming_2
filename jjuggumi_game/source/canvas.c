@@ -81,7 +81,7 @@ void draw(void)
 
 // 상태 출력
 void print_status(void)
-{
+{	
 	printf("no. of players left: %2d\n", n_alive);
 	enline(2,40);
 	printf("\t\t intl\tstr\tstm\n");
@@ -91,13 +91,7 @@ void print_status(void)
 		printf("player%2d: %s\t %2d(%+2d)\t%2d(%+2d)\t%3d%%\titem :%d [%d]\n", p, player[p].is_alive ? "ALIVE" : "DEAD", player[p].intel, player[p].item.intel_buf, player[p].str, player[p].item.str_buf, player[p].stamina, player[p].hasitem, player[p].item.id);
 	}
 
-	for (int i = 0; i < n_item; i++) // 디버그 창
-	{
-		printf("Item id: %d\tGetable: %d\tX: %02d\tY: %02d\n", item[i].id, item[i].getable, item[i].ix, item[i].iy);
-	}
-
-	printf("Play time: %03ds", tick[0] / 1000);
-	printf("\nX:%02d Y:%02d", player[0].px, player[0].py);
+	debug();
 }
 
 // ★ 현재 맵을 temp 버퍼에 임시 저장
@@ -125,14 +119,15 @@ void restore_front_buf(void)
 }
 
 // ♨ 다이얼로그 출력
-void dialog(int opt)
+void dialog(int opt, int data)
 {
 	char time_ment[24] = "Game starts in n seconds"; // 'n' = 15
 	char start_ment[16] = "!! GAME START !!";
 	char out_ment[16] = "!! PLAYER OUT !!";
 	char item_exchange[26] = "Want to exchange an item??";
 	char select_ment[17] = "(SPACE to Select)";
-	char fight[30] = "Do you want to fight Player n?";
+	char fight_ment[30] = "Do you want to fight Player n?";
+	char fight_opt[3][10] = { "Force", "Intercept", "Ignor" };
 
 	int Dialog_start_ROW;
 	int Dialog_start_COL;
@@ -272,6 +267,106 @@ void dialog(int opt)
 	}
 	else if (opt == 3) // "야간운동" 0번 플레이어, 다른 플레이어와 인접칸 상호작용 
 	{
+		Dialog_start_ROW = (N_ROW - 10) / 2;
+		Dialog_start_COL = (N_COL / 2) - 16;
+
+		for (int i = 0; i < 10; i++)
+		{
+			for (int j = 0; j < 34; j++)
+			{
+				back_buf[Dialog_start_ROW + i][Dialog_start_COL + j] = ' ';
+				if (i == 0 || i == 9 || j == 0 || j == 33)
+				{
+					back_buf[Dialog_start_ROW + i][Dialog_start_COL + j] = '+';
+				}
+				else if (i == 2 && j > 1 && j < 32)
+				{
+					back_buf[Dialog_start_ROW + i][Dialog_start_COL + j] = fight_ment[j - 2];
+					back_buf[Dialog_start_ROW + i][Dialog_start_COL + 30] = '0' + data;
+				}
+				else if (i == 3 && j > 8 && j < 26)
+				{
+					back_buf[Dialog_start_ROW + i][Dialog_start_COL + j] = select_ment[j - 9];
+				}
+				else if (i == 5 && j > 13 && j < 19)
+				{
+					back_buf[Dialog_start_ROW + i][Dialog_start_COL + j] = fight_opt[0][j - 14];
+				}
+				else if (i == 6 && j > 11 && j < 21)
+				{
+					back_buf[Dialog_start_ROW + i][Dialog_start_COL + j] = fight_opt[1][j - 12];
+				}
+				else if (i == 7 && j > 13 && j < 19)
+				{
+					back_buf[Dialog_start_ROW + i][Dialog_start_COL + j] = fight_opt[2][j - 14];
+				}
+			}
+		}
+
+		fight = 0;
+
 		// <강탈 / 회유 / 무시>
+		while (1)
+		{
+			if (fight < 0) { fight = 0; }
+			if (fight > 2) { fight = 2; }
+
+			back_buf[Dialog_start_ROW + 5][Dialog_start_COL + 12] = ' ';
+			back_buf[Dialog_start_ROW + 5][Dialog_start_COL + 20] = ' ';
+			back_buf[Dialog_start_ROW + 6][Dialog_start_COL + 10] = ' ';
+			back_buf[Dialog_start_ROW + 6][Dialog_start_COL + 22] = ' ';
+			back_buf[Dialog_start_ROW + 7][Dialog_start_COL + 12] = ' ';
+			back_buf[Dialog_start_ROW + 7][Dialog_start_COL + 20] = ' ';
+
+			if (fight == 0)
+			{
+				back_buf[Dialog_start_ROW + 5][Dialog_start_COL + 12] = '>';
+				back_buf[Dialog_start_ROW + 5][Dialog_start_COL + 20] = '<';
+			}
+			else if (fight == 1)
+			{
+				back_buf[Dialog_start_ROW + 6][Dialog_start_COL + 10] = '>';
+				back_buf[Dialog_start_ROW + 6][Dialog_start_COL + 22] = '<';
+			}
+			else
+			{
+				back_buf[Dialog_start_ROW + 7][Dialog_start_COL + 12] = '>';
+				back_buf[Dialog_start_ROW + 7][Dialog_start_COL + 20] = '<';
+			}
+
+			key_t key = get_key();
+
+			if (key == K_UP)
+			{
+				fight --;
+			}
+			else if (key == K_DOWN)
+			{
+				fight ++;
+			}
+			else if (key == K_SPACE)
+			{
+				break;
+			}
+			back_buf[Dialog_start_ROW + 6][Dialog_start_COL + 8] = ' ';
+			back_buf[Dialog_start_ROW + 6][Dialog_start_COL + 21] = ' ';
+
+			display();
+			Sleep(10);
+		}
+		restore_front_buf();
+		display();
 	}
+}
+
+void debug(void)
+{
+	for (int i = 0; i < n_item; i++)
+	{
+		printf("Item id: %d Getable: %d X: %02d Y: %02d\n", item[i].id, item[i].getable, item[i].ix, item[i].iy);
+	}
+
+	printf("Play time: %03ds\n", tick[0] / 1000);
+	printf("Player Location -> X:%02d Y:%02d\n", player[0].px, player[0].py);
+	printf("fight: %d", fight);
 }

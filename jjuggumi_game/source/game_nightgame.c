@@ -6,7 +6,7 @@ void nightgame(void)
 
 	display();
 
-	// dialog(0); // 카운트 다운 다이얼로그
+	// dialog(0, -1); // 카운트 다운 다이얼로그
 
 	while (1)
 	{
@@ -21,7 +21,6 @@ void nightgame(void)
 			if (key != K_SPACE)
 			{
 				move_manual(key);
-				player[0].stamina--;
 			}
 		}
 
@@ -34,18 +33,9 @@ void nightgame(void)
 			}
 		}
 
-		for (int i = 0; i < n_item; i++)
-		{
-			// getable 여부에 따른 아이템 시각화
-			if (item[i].getable == true)
-			{
-				back_buf[item[i].ix][item[i].iy] = 'I';
-			}
-			else if (back_buf[item[i].ix][item[i].iy] == 'I')
-			{
-				back_buf[item[i].ix][item[i].iy] = ' ';
-			}
-		}
+		player_visable();
+
+		nightgame_item_visable();
 
 		for (int i  = 0; i < n_player; i++)
 		{
@@ -54,7 +44,7 @@ void nightgame(void)
 			// 플레이어 인접 칸 아이템 탐색 (상.하.좌.우) (대각선 포함 X)
 			for (int j = 0; j < n_item; j++)
 			{
-				if ((tick[0] - player[i].interact_timestamp > 1000) && (item[j].getable == true) &&
+				if ((tick[0] - player[i].interact_timestamp > 1000) && (item[j].getable == true) && player[i].is_alive &&
 					((((player[i].px + 1) == (item[j].ix)) && ((player[i].py + 0) == (item[j].iy))) ||
 					(((player[i].px + 0) == (item[j].ix)) && ((player[i].py + 1) == (item[j].iy))) ||
 					(((player[i].px - 1) == (item[j].ix)) && ((player[i].py + 0) == (item[j].iy))) ||
@@ -64,28 +54,27 @@ void nightgame(void)
 					{
 						if (i == 0)
 						{
-							dialog(2);
+							dialog(2, -1);
 						}
 						else
 						{
 							get_item = randint(0, 1);
 						}
 
-						if (get_item == true)
+						if (get_item == true) // 아이템 교환 (아이템 교환 후 이전 아이템을 플레이어 기준 반경 3칸 내에 재배치 -> 아이템을 던지는 느낌?)
 						{
 							for (int k = 0; k < n_item; k++)
 							{
 								if (item[k].id == player[i].item.id)
 								{
-									x = item[k].ix;
-									y = item[k].iy;
+									do
+									{
+										x = randint(player[i].px - 3, player[i].px + 3);
+										y = randint(player[i].py - 3, player[i].py + 3);
+									} while (!placable(x, y));
 
-;									item[k].ix = item[j].ix;
-									item[k].iy = item[j].iy;
-
-									item[j].ix = x;
-									item[j].iy = y;
-
+									item[k].ix = x;
+									item[k].iy = y;
 									item[k].getable = true;
 								}
 							}
@@ -108,14 +97,14 @@ void nightgame(void)
 						player[i].interact_timestamp = tick[0];
 						player_stamina(i, 1, player[i].item.stamina_buf);
 					}
-					debug_k++;
 				}
 			}
 
-			// 플레이어 인접 칸 아이템 탐색 (상.하.좌.우) (대각선 포함 X)
-			/*for (int j = i + 1; j < n_player; j++)
+			// 플레이어 인접 칸 다른 플레이어 탐색 (상.하.좌.우) (대각선 포함 X)
+			for (int j = i + 1; j < n_player; j++)
 			{
-				if ((player[j].is_alive == true) &&
+				if (((tick[0] - player[i].interact_timestamp > 1000) || (tick[0] - player[j].interact_timestamp > 1000)) &&
+					(player[i].is_alive && player[j].is_alive) && (player[i].hasitem || player[j].hasitem) &&
 					((((player[i].px + 1) == (player[j].px)) && ((player[i].py + 0) == (player[j].py))) ||
 					(((player[i].px + 0) == (player[j].px)) && ((player[i].py + 1) == (player[j].py))) ||
 					(((player[i].px - 1) == (player[j].px)) && ((player[i].py + 0) == (player[j].py))) ||
@@ -123,61 +112,176 @@ void nightgame(void)
 				{
 					if (i == 0)
 					{
-						dialog(3);
+						if (player[j].hasitem == false)
+						{
+							continue;
+						}
+						dialog(3, j);
 					}
 					else
 					{
-						fight[0] = randint(0, 2);
+						fight = randint(0, 2);
 					}
 
-					if ((player[i].hasitem == false) && (player[j].hasitem == true))
+					if (fight == 2)
 					{
-						if((player[i].intel+player[i].item.intel_buf))
-						if (fight[0] == 0) // 강탈
-						{
-							if ()
-						}
-						else if (fight[0] == 1) // 회유
-						{
-
-						}
-						else // 무시
-						{
-
-						}
+						player[i].interact_timestamp = player[j].interact_timestamp = tick[0];
+						continue;
 					}
-					else if ((player[i].hasitem == true) && (player[j].hasitem == false))
+
+					ITEM item_temp;
+
+					if (player[i].hasitem == false && player[j].hasitem == true)
 					{
-						if (fight[0] == 0) // 강탈
+						if (fight == 0) // 강탈
 						{
-							if ()
+							if ((player[i].str + player[i].item.str_buf) * (player[i].stamina / 100) >
+								(player[j].str + player[j].item.str_buf) * (player[j].stamina / 100))
+							{
+								item_temp = player[i].item;
+								player[i].item = player[j].item;
+								player[j].item = item_temp;
+								player[i].hasitem = true;
+								player[j].hasitem = false;
+								player[i].stamina -= 40;
+							}
+							else
+							{
+								player[i].stamina -= 60;
+							}
 						}
-						else if (fight[0] == 1) // 회유
+						else if (fight = 1) // 회유
 						{
-
+							if ((player[i].intel + player[i].item.intel_buf) * (player[i].stamina / 100) >
+								(player[j].intel + player[j].item.intel_buf) * (player[j].stamina / 100))
+							{
+								item_temp = player[i].item;
+								player[i].item = player[j].item;
+								player[j].item = item_temp;
+								player[i].hasitem = true;
+								player[j].hasitem = false;
+								player[i].stamina -= 20;
+							}
+							else
+							{
+								player[i].stamina -= 40;
+							}
 						}
-						else // 무시
-						{
-
-						}
+						// player[i].interact_timestamp = tick[0];
 					}
-					else if ((player[i].hasitem == true) && (player[j].hasitem == true))
+					else if (player[i].hasitem == true && player[j].hasitem == false)
 					{
-						if (fight[0] == 0) // 강탈 (교환)
+						if (fight == 0) // 강탈
 						{
-							if ()
+							if ((player[i].str + player[i].item.str_buf) * (player[i].stamina / 100) >
+								(player[j].str + player[j].item.str_buf) * (player[j].stamina / 100))
+							{
+								player[j].stamina -= 60;
+							}
+							else
+							{
+								item_temp = player[j].item;
+								player[j].item = player[i].item;
+								player[i].item = item_temp;
+								player[j].hasitem = true;
+								player[i].hasitem = false;
+								player[j].stamina -= 40;
+							}
 						}
-						else if (fight[0] == 1) // 회유 (교환)
+						else if (fight = 1) // 회유
 						{
-
+							if ((player[i].intel + player[i].item.intel_buf) * (player[i].stamina / 100) >
+								(player[j].intel + player[j].item.intel_buf) * (player[j].stamina / 100))
+							{
+								player[j].stamina -= 40;
+							}
+							else
+							{
+								item_temp = player[j].item;
+								player[j].item = player[i].item;
+								player[i].item = item_temp;
+								player[j].hasitem = true;
+								player[i].hasitem = false;
+								player[j].stamina -= 20;
+							}
 						}
-						else // 무시
-						{
-
-						}
+						// player[j].interact_timestamp = tick[0];
 					}
+					else if (player[i].hasitem == true && player[j].hasitem == true)
+					{
+						if (randint(0, 1) || (i == 0)) // i가 주도
+						{
+							if (fight == 0) // 강탈
+							{
+								if ((player[i].str + player[i].item.str_buf) * (player[i].stamina / 100) >
+									(player[j].str + player[j].item.str_buf) * (player[j].stamina / 100))
+								{
+									item_temp = player[i].item;
+									player[i].item = player[j].item;
+									player[j].item = item_temp;
+									player[i].stamina -= 40;
+								}
+								else
+								{
+									player[i].stamina -= 60;
+								}
+							}
+							else if (fight = 1) // 회유
+							{
+								if ((player[i].intel + player[i].item.intel_buf) * (player[i].stamina / 100) >
+									(player[j].intel + player[j].item.intel_buf) * (player[j].stamina / 100))
+								{
+									item_temp = player[i].item;
+									player[i].item = player[j].item;
+									player[j].item = item_temp;
+									player[i].stamina -= 20;
+								}
+								else
+								{
+									player[i].stamina -= 40;
+								}
+							}
+							// player[i].interact_timestamp = tick[0];
+						}
+						else // j가 주도
+						{
+							if (fight == 0) // 강탈
+							{
+								if ((player[i].str + player[i].item.str_buf) * (player[i].stamina / 100) >
+									(player[j].str + player[j].item.str_buf) * (player[j].stamina / 100))
+								{
+									player[j].stamina -= 60;
+								}
+								else
+								{
+									item_temp = player[j].item;
+									player[j].item = player[i].item;
+									player[i].item = item_temp;
+									player[j].stamina -= 40;
+								}
+							}
+							else if (fight = 1) // 회유
+							{
+								if ((player[i].intel + player[i].item.intel_buf) * (player[i].stamina / 100) >
+									(player[j].intel + player[j].item.intel_buf) * (player[j].stamina / 100))
+								{
+									player[j].stamina -= 40;
+								}
+								else
+								{
+									item_temp = player[j].item;
+									player[j].item = player[i].item;
+									player[i].item = item_temp;
+									player[j].stamina -= 20;
+								}
+							}
+							// player[j].interact_timestamp = tick[0];
+						}
+						
+					}
+					player[i].interact_timestamp = player[j].interact_timestamp = tick[0];
 				}
-			}*/
+			}
 		}
 		display();
 		Sleep(10);
