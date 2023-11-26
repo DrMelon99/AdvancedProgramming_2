@@ -7,7 +7,7 @@ bool player_control(void)
 	static int dx[4] = { -1, 1, 0, 0 };
 	static int dy[4] = { 0, 0, -1, 1 };
 
-	int dir;  // 움직일 방향(0~3)
+	int dir = 0;  // 움직일 방향(0~3)
 
 	key_t key = get_key();
 	if (key == K_QUIT)
@@ -115,49 +115,49 @@ void npc_move_mugunghwa(void)
 {
 	int nx, ny;  // 다음에 놓일 자리
 
-	for (int i = 1; i < n_player; i++)
+	for (int p = 1; p < n_player; p++)
 	{
-		if (tick[0] % player[i].period == 0)
+		if (tick[0] % player[p].period == 0)
 		{
 			do
 			{
 				if (randint(0, 100) < 70) // NPC 앞으로 -> 70% / 영희의 킬모드가 켜질 경우 NPC 제자리 -> 70%
 				{
-					nx = player[i].px;
+					nx = player[p].px;
 					if (yh_killmode == false)
 					{
-						ny = player[i].py - 1;
+						ny = player[p].py - 1;
 					}
 					else
 					{
-						ny = player[i].py;
+						ny = player[p].py;
 					}
 				}
 				else if (randint(0, 100) >= 70 && randint(0, 100) < 80) // NPC 위로 -> 10%
 				{
-					nx = player[i].px - 1;
-					ny = player[i].py;
+					nx = player[p].px - 1;
+					ny = player[p].py;
 				}
 				else if (randint(0, 100) >= 80 && randint(0, 100) < 90) // NPC 아래로 -> 10%
 				{
-					nx = player[i].px + 1;
-					ny = player[i].py;
+					nx = player[p].px + 1;
+					ny = player[p].py;
 				}
 				else // NPC 제자리 -> 10% / 영희의 킬모드가 켜질 경우 NPC 앞으로 10%
 				{
-					nx = player[i].px;
+					nx = player[p].px;
 					if (yh_killmode == false)
 					{
-						ny = player[i].py;
+						ny = player[p].py;
 					}
 					else
 					{
-						ny = player[i].py - 1;
+						ny = player[p].py - 1;
 					}
 				}
 			} while (!placable(nx, ny));
 
-			move_tail_mugunghwa(i, nx, ny);
+			move_tail_mugunghwa(p, nx, ny);
 		}
 	}
 }
@@ -312,28 +312,87 @@ void younghee(void)
 void npc_move_nightgame(void)
 {
 	int nx, ny;  // 다음에 놓일 자리
+	bool found;
 
-	for (int i = 1; i < n_player; i++)
+	for (int p = 1; p < n_player; p++)
 	{
-		if (tick[0] % player[i].period == 0)
+		if (tick[0] % player[p].period == 0)
 		{
-			do
-			{
-				nx = player[i].px + randint(-1, 1);
-				ny = player[i].py + randint(-1, 1);
-			} while (!placable(nx, ny));
+			found = false;
 
-			move_tail_nightgame(i, nx, ny);
+			for (int i = -5; i < 6 && !found; i++)
+			{
+				for (int j = -5; j < 6 && !found; j++)
+				{
+					if ((i == 0) && (j == 0))
+						continue;
+
+					for (int k = 0; k < n_item && !found; k++)
+					{
+						if ((player[p].px + i == item[k].ix) && (player[p].py + j == item[k].iy) &&
+							(player[p].hasitem == false) && (item[k].getable == true))
+						{
+							if (i < 0)
+								nx = player[p].px - 1;
+							else if (i > 0)
+								nx = player[p].px + 1;
+							else
+								nx = player[p].px;
+
+							if (j < 0)
+								ny = player[p].py - 1;
+							else if (j > 0)
+								ny = player[p].py + 1;
+							else
+								ny = player[p].py;
+
+							if (!placable(nx, ny))
+								continue;
+
+							found = true;
+						}
+					}
+
+					for (int k = 0; k < n_player && !found; k++)
+					{
+						if ((player[p].px + i == player[k].px) && (player[p].py + j == player[k].py) &&
+							(player[k].hasitem == true) && (player[k].is_alive == true))
+						{
+							if (i < 0)
+								nx = player[p].px - 1;
+							else if (i > 0)
+								nx = player[p].px + 1;
+							else
+								nx = player[p].px;
+
+							if (j < 0)
+								ny = player[p].py - 1;
+							else if (j > 0)
+								ny = player[p].py + 1;
+							else
+								ny = player[p].py;
+
+							if (!placable(nx, ny))
+								continue;
+
+							found = true;
+						}
+					}
+				}
+			}
+
+			if (found == false || (tick[0] - player[p].interact_timestamp < 3000))
+			{
+				do
+				{
+					nx = player[p].px + randint(-1, 1);
+					ny = player[p].py + randint(-1, 1);
+				} while (!placable(nx, ny));
+			}
+
+			move_tail(p, nx, ny);
 		}
 	}
-}
-
-void move_tail_nightgame(int p, int nx, int ny)
-{
-	back_buf[nx][ny] = back_buf[player[p].px][player[p].py];
-	back_buf[player[p].px][player[p].py] = ' ';
-	player[p].px = nx;
-	player[p].py = ny;
 }
 
 void nightgame_item_visable(void)

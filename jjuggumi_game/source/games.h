@@ -16,12 +16,17 @@
 #define DIR_LEFT	2
 #define DIR_RIGHT	3
 
+#define DIE_MESSAGE "Player n died"
 #define MUGUNWHA_MENT "무 궁 화 꽃 이 피 었 습 니 다"
+#define NIGHTGAME_ALART1 "Player n obtained an item"
+#define NIGHTGAME_ALART2 "Player n steals an item from Player n"
+
 
 bool yh_killmode, get_item;
 int fight;
 int count;
 int x, y;
+int ingame_exchange_data;
 
 /* 공통 영역 */
 // ★ 사용자 움직임 정의
@@ -54,8 +59,6 @@ void nightgame(void);
 void nightgame_init(void);
 // ♨ "야간운동" NPC 움직임 정의
 void npc_move_nightgame(void);
-// ♨ "야간운동" back_buf[][]에 움직임 반영
-void move_tail_nightgame(int p, int nx, int ny);
 // ★ "야간운동" 아이템 시각화
 void nightgame_item_visable(void);
 

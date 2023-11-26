@@ -4,11 +4,12 @@ void jebi(void)
 {
 	jebi_init();
 
-	display();
+	dialog(0, -1);
 
-	while (1)
+	while (1) // 게임 진행 루프
 	{
-
+		if (player_control())
+			break;
 
 		display();
 		Sleep(10);

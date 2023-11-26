@@ -2,14 +2,14 @@
 #include <stdlib.h>
 #include <Windows.h>
 
+#include "keyin.h"
 #include "miscellaneous.h"
 
 void titlesong()
 {
-
 	int sound = 0;
 
-	while (sound < 26)
+	while (sound < 26 && !_kbhit())
 	{
 		if (sound == 0 || sound == 1 || sound == 2 || sound == 3 ||
 			sound == 4 || sound == 5 || sound == 7 || sound == 8 ||
@@ -324,8 +324,17 @@ void SetConsoleFontSize(int size)
 	fontInfo.dwFontSize.Y = size;
 	SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &fontInfo);
 }
+
 int randint(int low, int high)
 {
 	int rnum = rand() % (high - low + 1) + low;
 	return rnum;
+}
+
+void system_cursor(void)
+{
+	CONSOLE_CURSOR_INFO cursorInfo = { 0, };
+	cursorInfo.dwSize = 1; //커서 굵기 (1 ~ 100)
+	cursorInfo.bVisible = FALSE; //커서 Visible TRUE(보임) FALSE(숨김)
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
 }

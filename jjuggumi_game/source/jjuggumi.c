@@ -11,11 +11,6 @@
 
 int main(void)
 {
-	CONSOLE_CURSOR_INFO cursorInfo = { 0, };
-	cursorInfo.dwSize = 1; //커서 굵기 (1 ~ 100)
-	cursorInfo.bVisible = FALSE; //커서 Visible TRUE(보임) FALSE(숨김)
-	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
-
 	jjuggumi_init();
 	// intro(); // 쭈꾸미 게임 인트로
 	// mugunghwa(); // 무궁화 꽃이 피었습니다
@@ -30,7 +25,7 @@ int main(void)
 
 int jjuggumi_init(void)
 {
-	char start_option;
+	system_cursor();
 
 	SetConsoleFontSize(14);
 	system("mode con: cols=50 lines=80");

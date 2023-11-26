@@ -7,8 +7,8 @@
 void display(void)
 {
 	draw();
-	gotoxy(N_ROW + 1, 0);  // 추가로 표시할 정보가 있으면 맵과 상태창 사이의 빈 공간에 출력
-	print_status(-1);
+	gotoxy(N_ROW + 2, 0);  // 추가로 표시할 정보가 있으면 맵과 상태창 사이의 빈 공간에 출력
+	print_status();
 }
 
 void draw(void)
@@ -38,8 +38,9 @@ void gotoxy(int row, int col)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
-void print_status(int data)
+void print_status(void)
 {
+	enline(2, 40);
 	if (game_round == 1) // "무궁화 꽃이 피었습니다"
 	{
 		printf("no. of Players left: %2d\n", n_alive);
@@ -72,10 +73,10 @@ void print_status(int data)
 	}
 	else if (game_round == 4) // "제비뽑기"
 	{
-		printf("[Round %d] Turn: Player %d\n", count, data);
+		printf("[Round %d] Turn: Player %d\n", count, ingame_exchange_data);
 	}
 
-	debug();
+	// debug();
 }
 
 void map_init(int n_row, int n_col)
@@ -135,6 +136,68 @@ void restore_front_buf(void)
 	}
 }
 
+void print_addi_status(int opt, int p1, int p2)
+{
+	if (opt == 0) // 비우기
+	{
+		for (int i = 0; i < N_COL; i++)
+		{
+			back_buf[N_ROW][i] = ' ';
+		}
+	}
+	else if (opt == 1)
+	{
+		for (int i = 0; i < 13; i++)
+		{
+			if (i == 7)
+			{
+				back_buf[N_ROW][i] = '0' + p1;
+			}
+			else
+			{
+				back_buf[N_ROW][i] = DIE_MESSAGE[i];
+			}
+		}
+	}
+	else if (opt == 2) // "무궁화 꽃이 피었습니다"
+	{
+		
+	}
+	else if (opt == 3)
+	{
+		for (int i = 0; i < 25; i++)
+		{
+			if (i == 7)
+			{
+				back_buf[N_ROW][i] = '0' + p1;
+			}
+			else
+			{
+				back_buf[N_ROW][i] = NIGHTGAME_ALART1[i];
+			}
+		}
+	}
+	else if (opt == 4)
+	{
+		for (int i = 0; i < 37; i++)
+		{
+			if (i == 7)
+			{
+				back_buf[N_ROW][i] = '0' + p1;
+			}
+			else if (i == 36)
+			{
+				back_buf[N_ROW][i] = '0' + p2;
+			}
+			else
+			{
+				back_buf[N_ROW][i] = NIGHTGAME_ALART2[i];
+			}
+		}
+	}
+	
+}
+
 void dialog(int opt, int data)
 {
 	char time_ment[24] = "Game starts in n seconds"; // 'n' = 15
@@ -180,8 +243,10 @@ void dialog(int opt, int data)
 						}
 					}
 				}
+				
 				display();
-				Sleep(1000);
+				Beep(SOUND_C / 2, 500);
+				Sleep(500);
 			}
 			else if (t == 0) // "GAME START" 다이얼로그
 			{
@@ -204,7 +269,8 @@ void dialog(int opt, int data)
 					}
 				}
 				display();
-				Sleep(1000);
+				Beep(SOUND_C, 500);
+				Sleep(500);
 			}
 			else
 			{

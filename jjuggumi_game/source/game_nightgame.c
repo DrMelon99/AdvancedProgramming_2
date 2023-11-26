@@ -4,11 +4,11 @@ void nightgame(void)
 {
 	nightgame_init();
 
-	dialog(0, -1);
+	// dialog(0, -1);
 
 	while (1) // 게임 진행 루프
 	{
-		if (player_control())
+		if (player_control() || (n_alive == 1))
 			break;
 		
 		npc_move_nightgame();
@@ -16,6 +16,9 @@ void nightgame(void)
 		player_visable();
 
 		nightgame_item_visable();
+
+		if (tick[0] - tick[1] > 1000)
+			print_addi_status(0, -1, -1);
 
 		for (int i  = 0; i < n_player; i++)
 		{
@@ -59,7 +62,8 @@ void nightgame(void)
 
 							player[i].item = item[j];
 							item[j].getable = false;
-							player[i].interact_timestamp = tick[0];
+							player[i].interact_timestamp = tick[1] = tick[0];
+							print_addi_status(3, i, -1);
 							player_stamina(i, 1, player[i].item.stamina_buf);
 						}
 						else // 아이템 무시
@@ -72,7 +76,8 @@ void nightgame(void)
 						player[i].item = item[j];
 						item[j].getable = false;
 						player[i].hasitem = true;
-						player[i].interact_timestamp = tick[0];
+						player[i].interact_timestamp = tick[1] = tick[0];
+						print_addi_status(3, i, -1);
 						player_stamina(i, 1, player[i].item.stamina_buf);
 					}
 				}
@@ -83,6 +88,7 @@ void nightgame(void)
 			{
 				if (((tick[0] - player[i].interact_timestamp > 1000) || (tick[0] - player[j].interact_timestamp > 1000)) &&
 					(player[i].is_alive && player[j].is_alive) && (player[i].hasitem || player[j].hasitem) &&
+					(player[i].stamina > 0 && player[j].stamina > 0) &&
 					((((player[i].px + 1) == (player[j].px)) && ((player[i].py + 0) == (player[j].py))) ||
 					(((player[i].px + 0) == (player[j].px)) && ((player[i].py + 1) == (player[j].py))) ||
 					(((player[i].px - 1) == (player[j].px)) && ((player[i].py + 0) == (player[j].py))) ||
@@ -103,7 +109,7 @@ void nightgame(void)
 
 					if (fight == 2)
 					{
-						player[i].interact_timestamp = player[j].interact_timestamp = tick[0];
+						player[i].interact_timestamp = player[j].interact_timestamp = tick[1] = tick[0];
 						continue;
 					}
 
@@ -121,6 +127,7 @@ void nightgame(void)
 								player[j].item = item_temp;
 								player[i].hasitem = true;
 								player[j].hasitem = false;
+								print_addi_status(4, i, j);
 								player_stamina(i, 1, player[i].item.stamina_buf - 40);
 							}
 							else
@@ -138,6 +145,7 @@ void nightgame(void)
 								player[j].item = item_temp;
 								player[i].hasitem = true;
 								player[j].hasitem = false;
+								print_addi_status(4, i, j);
 								player_stamina(i, 1, player[i].item.stamina_buf - 20);
 							}
 							else
@@ -162,6 +170,7 @@ void nightgame(void)
 								player[i].item = item_temp;
 								player[j].hasitem = true;
 								player[i].hasitem = false;
+								print_addi_status(4, j, i);
 								player_stamina(j, 1, player[j].item.stamina_buf - 40);
 							}
 						}
@@ -179,6 +188,7 @@ void nightgame(void)
 								player[i].item = item_temp;
 								player[j].hasitem = true;
 								player[i].hasitem = false;
+								print_addi_status(4, j, i);
 								player_stamina(j, 1, player[j].item.stamina_buf - 20);
 							}
 						}
@@ -195,6 +205,7 @@ void nightgame(void)
 									item_temp = player[i].item;
 									player[i].item = player[j].item;
 									player[j].item = item_temp;
+									print_addi_status(4, i, j);
 									player_stamina(i, 1, player[i].item.stamina_buf - 40);
 								}
 								else
@@ -210,6 +221,7 @@ void nightgame(void)
 									item_temp = player[i].item;
 									player[i].item = player[j].item;
 									player[j].item = item_temp;
+									print_addi_status(4, i, j);
 									player_stamina(i, 1, player[i].item.stamina_buf - 20);
 								}
 								else
@@ -232,6 +244,7 @@ void nightgame(void)
 									item_temp = player[j].item;
 									player[j].item = player[i].item;
 									player[i].item = item_temp;
+									print_addi_status(4, j, i);
 									player_stamina(j, 1, player[j].item.stamina_buf - 40);
 								}
 							}
@@ -247,24 +260,24 @@ void nightgame(void)
 									item_temp = player[j].item;
 									player[j].item = player[i].item;
 									player[i].item = item_temp;
+									print_addi_status(4, j, i);
 									player_stamina(j, 1, player[j].item.stamina_buf - 20);
 								}
 							}
 						}
 						
 					}
-					player[i].interact_timestamp = player[j].interact_timestamp = tick[0];
+					player[i].interact_timestamp = player[j].interact_timestamp = tick[1] = tick[0];
 				}
 			}
 
 			// 플레이어의 스태미나가 0이면 탈락처리
-			if ((player[i].stamina == 0) && (player[i].is_alive == true))
+			/*if ((player[i].stamina == 0) && (player[i].is_alive == true))
 			{
 				n_alive--;
+				print_addi_status(1, i, -1);
 				player[i].is_alive = false;
-			}
-
-
+			}*/
 		}
 		display();
 		Sleep(10);
@@ -285,7 +298,7 @@ void nightgame_init(void)
 
 	map_init(25, 80);
 
-	for (int j = 0; j < n_player; j++) // 플레이어 배치
+	for (int i = 0; i < n_player; i++) // 플레이어 배치
 	{
 		do
 		{
@@ -293,14 +306,14 @@ void nightgame_init(void)
 			y = randint(1, N_COL - 2);
 		} while (!placable(x, y));
 
-		player[j].px = x;
-		player[j].py = y;
-		player[j].period = randint(100, 200);
+		player[i].px = x;
+		player[i].py = y;
+		player[i].period = randint(100, 200);
 
-		back_buf[player[j].px][player[j].py] = '0' + j;  // (0 .. n_player-1)
+		back_buf[player[i].px][player[i].py] = '0' + i;  // (0 .. n_player-1)
 	}
 
-	for (int j = 0; j < n_item ; j++) // 아이템 배치
+	for (int i = 0; i < n_item ; i++) // 아이템 배치
 	{
 		do
 		{
@@ -308,8 +321,8 @@ void nightgame_init(void)
 			y = randint(1, N_COL - 2);
 		} while (!placable(x, y));
 
-		item[j].ix = x;
-		item[j].iy = y;
+		item[i].ix = x;
+		item[i].iy = y;
 	}
 
 	nightgame_item_visable();

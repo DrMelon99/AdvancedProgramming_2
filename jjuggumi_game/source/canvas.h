@@ -28,7 +28,7 @@ void gotoxy(int x, int y);
 // ★ row행, col열에 ch 출력
 void printxy(char ch, int row, int col);
 // ★ 상태 출력
-void print_status(int data);
+void print_status(void);
 // ★ 두 버퍼를를 완전히 비우고 맵의 외곽을 '*'로 구성 (게임 초기 설정 시 실행)
 void map_init(int n_row, int n_col);
 // ★ back_buf[row][col]이 이동할 수 있는 자리인지 확인하는 함수
@@ -38,6 +38,8 @@ bool placable(int row, int col);
 void memory_front_buf(void);
 // ★ 마지막에 저장했던 temp_buf를 back_buf에 복원
 void restore_front_buf(void);
+// 추가 정보 출력
+void print_addi_status(int opt, int p, int data);
 // ♨ 입력된 opt에 따른 다이얼로그 출력
 void dialog(int opt, int data);
 

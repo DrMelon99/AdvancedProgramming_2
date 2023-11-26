@@ -13,7 +13,7 @@
 #define SOUND_Gsharp 1661.219 // 솔#
 #define SOUND_A 1760.000 // 라
 #define SOUND_Asharp 1864.655 // 라#
-#define SOUND_B 1975.533
+#define SOUND_B 1975.533 // 시
 
 // low 이상 high 이하 난수를 발생시키는 함수
 int randint(int low, int high);
@@ -32,4 +32,8 @@ void mugunghwasong(int sound);
 
 // 콘솔 창의 폰트 크기 조정
 void SetConsoleFontSize(int size);
+
+// 콘솔 커서 숨김
+void system_cursor(void);
+
 #endif

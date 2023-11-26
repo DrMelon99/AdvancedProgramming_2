@@ -8,33 +8,13 @@ void mugunghwa(void)
 
 	while (1)
 	{
-		if (player_control())
+		if (player_control() || (count > 3)/* || (생존자가 한명일 때)*/)
 			break;
 
 		npc_move_mugunghwa();
 
 		// 영희의 "무궁화 꽃이 피었습니다" 말하기 및 상태 전환
 		younghee();
-
-		// 사용자 움직임 키입력
-		key_t key = get_key();
-		if ((key == K_QUIT) || (n_alive == 1) || (count > 3))
-		{
-			break;
-		}
-		else if (key != K_UNDEFINED)
-		{
-			player_control(key);
-		}
-
-		// 다른 NPC 랜덤 움직임 작동
-		for (int i = 1; i < n_player; i++)
-		{
-			if (tick[0] % player[i].period == 0)
-			{
-				npc_move_mugunghwa(i, -1);
-			}
-		}
 
 		display();
 		Sleep(10);
@@ -61,9 +41,8 @@ void mugunghwa_init(void)
 		player[i].is_pass = false;
 	}
 
-	// "무궁화 꽃이 피었습니다" 라운드와 통과 플레이어 수 0으로 초기화
-	count = pass_n_player = 0;
-
+	// "무궁화 꽃이 피었습니다" 라운드 수 0으로 초기화
+	count = 0;
 
 	// 영희 배치
 	for (int i = 0; i < 3; i++)
@@ -85,7 +64,7 @@ void mugunghwa_init(void)
 		player[i].py = y;
 		player[i].period = randint(100, 500);
 
-		back_buf[player[i].px][player[i].py] = '0' + i;  // (0 .. n_player-1)
+		back_buf[player[i].px][player[i].py] = '0' + i;
 	}
 
 	display();
