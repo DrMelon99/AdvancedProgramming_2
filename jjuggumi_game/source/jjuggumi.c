@@ -12,7 +12,7 @@
 int main(void)
 {
 	jjuggumi_init();
-	// intro(); // 쭈꾸미 게임 인트로
+	intro(); // 쭈꾸미 게임 인트로
 	// mugunghwa(); // 무궁화 꽃이 피었습니다
 	nightgame(); // 야간운동
 	// juldarigi(); // 줄다리기
