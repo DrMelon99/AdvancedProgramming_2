@@ -4,7 +4,7 @@ void nightgame(void)
 {
 	nightgame_init();
 
-	// dialog(0, -1);
+	dialog(0, -1);
 
 	while (1) // 게임 진행 루프
 	{
@@ -63,10 +63,7 @@ void nightgame(void)
 							player[i].item = item[j];
 							item[j].getable = false;
 							player[i].interact_timestamp = tick[1] = tick[0];
-<<<<<<< Updated upstream
-=======
 							print_addi_status(0, -1, -1);
->>>>>>> Stashed changes
 							print_addi_status(3, i, -1);
 							player_stamina(i, 1, player[i].item.stamina_buf);
 						}
@@ -81,10 +78,7 @@ void nightgame(void)
 						item[j].getable = false;
 						player[i].hasitem = true;
 						player[i].interact_timestamp = tick[1] = tick[0];
-<<<<<<< Updated upstream
-=======
 						print_addi_status(0, -1, -1);
->>>>>>> Stashed changes
 						print_addi_status(3, i, -1);
 						player_stamina(i, 1, player[i].item.stamina_buf);
 					}
@@ -135,10 +129,7 @@ void nightgame(void)
 								player[j].item = item_temp;
 								player[i].hasitem = true;
 								player[j].hasitem = false;
-<<<<<<< Updated upstream
-=======
 								print_addi_status(0, -1, -1);
->>>>>>> Stashed changes
 								print_addi_status(4, i, j);
 								player_stamina(i, 1, player[i].item.stamina_buf - 40);
 							}
@@ -157,10 +148,7 @@ void nightgame(void)
 								player[j].item = item_temp;
 								player[i].hasitem = true;
 								player[j].hasitem = false;
-<<<<<<< Updated upstream
-=======
 								print_addi_status(0, -1, -1);
->>>>>>> Stashed changes
 								print_addi_status(4, i, j);
 								player_stamina(i, 1, player[i].item.stamina_buf - 20);
 							}
@@ -186,10 +174,7 @@ void nightgame(void)
 								player[i].item = item_temp;
 								player[j].hasitem = true;
 								player[i].hasitem = false;
-<<<<<<< Updated upstream
-=======
 								print_addi_status(0, -1, -1);
->>>>>>> Stashed changes
 								print_addi_status(4, j, i);
 								player_stamina(j, 1, player[j].item.stamina_buf - 40);
 							}
@@ -208,10 +193,7 @@ void nightgame(void)
 								player[i].item = item_temp;
 								player[j].hasitem = true;
 								player[i].hasitem = false;
-<<<<<<< Updated upstream
-=======
 								print_addi_status(0, -1, -1);
->>>>>>> Stashed changes
 								print_addi_status(4, j, i);
 								player_stamina(j, 1, player[j].item.stamina_buf - 20);
 							}
@@ -229,10 +211,7 @@ void nightgame(void)
 									item_temp = player[i].item;
 									player[i].item = player[j].item;
 									player[j].item = item_temp;
-<<<<<<< Updated upstream
-=======
 									print_addi_status(0, -1, -1);
->>>>>>> Stashed changes
 									print_addi_status(4, i, j);
 									player_stamina(i, 1, player[i].item.stamina_buf - 40);
 								}
@@ -249,10 +228,7 @@ void nightgame(void)
 									item_temp = player[i].item;
 									player[i].item = player[j].item;
 									player[j].item = item_temp;
-<<<<<<< Updated upstream
-=======
 									print_addi_status(0, -1, -1);
->>>>>>> Stashed changes
 									print_addi_status(4, i, j);
 									player_stamina(i, 1, player[i].item.stamina_buf - 20);
 								}
@@ -276,10 +252,7 @@ void nightgame(void)
 									item_temp = player[j].item;
 									player[j].item = player[i].item;
 									player[i].item = item_temp;
-<<<<<<< Updated upstream
-=======
 									print_addi_status(0, -1, -1);
->>>>>>> Stashed changes
 									print_addi_status(4, j, i);
 									player_stamina(j, 1, player[j].item.stamina_buf - 40);
 								}
@@ -296,10 +269,7 @@ void nightgame(void)
 									item_temp = player[j].item;
 									player[j].item = player[i].item;
 									player[i].item = item_temp;
-<<<<<<< Updated upstream
-=======
 									print_addi_status(0, -1, -1);
->>>>>>> Stashed changes
 									print_addi_status(4, j, i);
 									player_stamina(j, 1, player[j].item.stamina_buf - 20);
 								}

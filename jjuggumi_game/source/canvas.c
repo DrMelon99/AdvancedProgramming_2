@@ -58,7 +58,7 @@ void print_status(void)
 		for (int p = 0; p < n_player; p++)
 		{
 			printf("Player%2d: %s\t %2d(%+2d)\t%2d(%+2d)\t%3d%%", p, player[p].is_alive ? "ALIVE" : "DEAD ", player[p].intel, player[p].item.intel_buf, player[p].str, player[p].item.str_buf, player[p].stamina);
-			printf("\thas_item? :%s, item_id: [%d]", player[p].hasitem ? "YES" : "NO ", player[p].item.id);
+			printf("\thas item :%s, item id: [%d]", player[p].hasitem ? "YES" : "NO ", player[p].item.id);
 			printf("\n");
 		}
 	}

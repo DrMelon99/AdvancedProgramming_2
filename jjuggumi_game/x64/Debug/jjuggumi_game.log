@@ -1,11 +1,4 @@
-<<<<<<< Updated upstream
 ﻿  game_nightgame.c
-=======
-﻿  canvas.c
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\canvas.c(250,18): warning C4244: '함수': 'double'에서 'DWORD'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-Z:\Dev\AdvancedProgramming_2\jjuggumi_game\source\canvas.c(274,10): warning C4244: '함수': 'double'에서 'DWORD'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  game_nightgame.c
   jjuggumi.c
   코드를 생성하고 있습니다...
->>>>>>> Stashed changes
-  jjuggumi_game.vcxproj -> Z:\Dev\AdvancedProgramming_2\jjuggumi_game\x64\Debug\jjuggumi_game.exe
+  jjuggumi_game.vcxproj -> C:\Users\jah06\Downloads\AdvancedProgramming_2-231e0437a75ac0163426d43e9b688d1a29df0476\AdvancedProgramming_2-231e0437a75ac0163426d43e9b688d1a29df0476\jjuggumi_game\x64\Debug\jjuggumi_game.exe
