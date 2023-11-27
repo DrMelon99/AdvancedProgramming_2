@@ -56,7 +56,7 @@ int jjuggumi_init(void)
 		p->stamina = 100; // 스태미나 100%
 
 		// 현재 상태
-		p->is_alive = true;
+		p->is_alive[0] = p->is_alive[1] = true;
 		p->hasitem = false;
 
 		/*if (i == 0)
@@ -95,21 +95,14 @@ int jjuggumi_init(void)
 
 	/*for (int i = 0; i < n_player; i++)
 	{
-		printf("번호: %d\n이름: %s\n지능: %d\n힘: %d\n스태미나:%d\n생존여부: %d\n\n", player[i].id, player[i].name, player[i].intel, player[i].str, player[i].stamina, player[i].is_alive);
+		printf("번호: %d\n이름: %s\n지능: %d\n힘: %d\n스태미나:%d\n생존여부: %d\n\n", player[i].id, player[i].name, player[i].intel, player[i].str, player[i].stamina, player[i].is_alive[0]);
 	}
 	for (int i = 0; i < n_item; i++)
 	{
 		printf("아이템 이름: %s\n지능 버프: %d\n힘 버프: %d\n스태미나 버프: %d\n\n", item[i].name, item[i].intel_buf, item[i].str_buf, item[i].stamina_buf);
 	}*/
-	
-	for (int i = 0; i < n_player; i++)
-	{
-		player[i].is_alive = true;
-	}
 
 	tick[0] = 0;
-
-	/*system("cls");*/
 
 	return 0;
 }
@@ -134,7 +127,7 @@ void ending(void)
 		enline(3, 15);
 		for (int i = 0; i < n_player; i++)
 		{
-			if (player[i].is_alive)
+			if (player[i].is_alive[0])
 			{
 				printf("%d번 플레이어\n", i);
 			}
@@ -147,7 +140,7 @@ void ending(void)
 		enline(3, 15);
 		for (int i = 0; i < n_player; i++)
 		{
-			if (player[i].is_alive)
+			if (player[i].is_alive[0])
 			{
 				printf("%d번 플레이어\n", i);
 			}

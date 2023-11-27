@@ -67,7 +67,7 @@ void player_visable(void)
 {
 	for (int i = 0; i < n_player; i++)
 	{
-		if ((player[i].is_alive == true) && (player[i].is_pass == false))
+		if ((player[i].is_alive[0] == true) && (player[i].is_pass == false))
 		{
 			back_buf[player[i].px][player[i].py] = '0' + i;
 		}
@@ -186,7 +186,7 @@ void move_tail_mugunghwa(int p, int nx, int ny)
 	{
 		for (int i = 1; i < 10; i++)
 		{
-			if (player[i].is_alive && ((ny > player[i].py) && (nx == player[i].px))) // 문제 해결
+			if (player[i].is_alive[0] && ((ny > player[i].py) && (nx == player[i].px))) // 문제 해결
 			{
 				back_buf[nx][ny] = back_buf[player[p].px][player[p].py]; // 이동
 				back_buf[player[p].px][player[p].py] = ' '; // 이동 전 흔적 지우기
@@ -196,7 +196,7 @@ void move_tail_mugunghwa(int p, int nx, int ny)
 			}
 			else
 			{
-				player[i].is_alive = false;
+				player[i].is_alive[0] = false;
 				n_alive--;
 				back_buf[player[p].px][player[p].py] = ' ';
 				break;
@@ -283,9 +283,9 @@ void younghee(void)
 
 			for (int i = 0, j = 0; i < n_player; i++)
 			{
-				if (player_statuspost[i] != player[i].is_alive)
+				if (player_statuspost[i] != player[i].is_alive[0])
 				{
-					player_statuspost[i] = player[i].is_alive;
+					player_statuspost[i] = player[i].is_alive[0];
 					player_outlist[j++] = i;
 				}
 			}
@@ -327,6 +327,7 @@ void npc_move_nightgame(void)
 					if ((i == 0) && (j == 0))
 						continue;
 
+					// 아이템 쪽으로 이동
 					for (int k = 0; k < n_item && !found; k++)
 					{
 						if ((player[p].px + i == item[k].ix) && (player[p].py + j == item[k].iy) &&
@@ -353,10 +354,11 @@ void npc_move_nightgame(void)
 						}
 					}
 
+					// 플레이어 쪽으로 이동
 					for (int k = 0; k < n_player && !found; k++)
 					{
 						if ((player[p].px + i == player[k].px) && (player[p].py + j == player[k].py) &&
-							(player[k].hasitem == true) && (player[k].is_alive == true))
+							(player[k].hasitem == true) && (player[k].is_alive[0] == true))
 						{
 							if (i < 0)
 								nx = player[p].px - 1;
@@ -381,6 +383,8 @@ void npc_move_nightgame(void)
 				}
 			}
 
+			// 아이템 및 플레이어를 찾지 못하거나 해당 두개와 상호작용한지 3초가 지나지 않았다면
+			// 랜덤으로 움직이기
 			if (found == false || (tick[0] - player[p].interact_timestamp < 3000))
 			{
 				do

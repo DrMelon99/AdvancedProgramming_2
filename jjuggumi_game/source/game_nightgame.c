@@ -25,7 +25,7 @@ void nightgame(void)
 			// 플레이어 인접 칸 아이템 탐색 (상.하.좌.우) (대각선 포함 X)
 			for (int j = 0; j < n_item; j++)
 			{
-				if ((tick[0] - player[i].interact_timestamp > 1000) && (item[j].getable == true) && player[i].is_alive &&
+				if ((tick[0] - player[i].interact_timestamp > 1000) && (item[j].getable == true) && player[i].is_alive[0] &&
 					((((player[i].px + 1) == (item[j].ix)) && ((player[i].py + 0) == (item[j].iy))) ||
 					(((player[i].px + 0) == (item[j].ix)) && ((player[i].py + 1) == (item[j].iy))) ||
 					(((player[i].px - 1) == (item[j].ix)) && ((player[i].py + 0) == (item[j].iy))) ||
@@ -89,7 +89,7 @@ void nightgame(void)
 			for (int j = i + 1; j < n_player; j++)
 			{
 				if (((tick[0] - player[i].interact_timestamp > 1000) || (tick[0] - player[j].interact_timestamp > 1000)) &&
-					(player[i].is_alive && player[j].is_alive) && (player[i].hasitem || player[j].hasitem) &&
+					(player[i].is_alive[0] && player[j].is_alive[0]) && (player[i].hasitem || player[j].hasitem) &&
 					(player[i].stamina > 0 && player[j].stamina > 0) &&
 					((((player[i].px + 1) == (player[j].px)) && ((player[i].py + 0) == (player[j].py))) ||
 					(((player[i].px + 0) == (player[j].px)) && ((player[i].py + 1) == (player[j].py))) ||
@@ -282,11 +282,11 @@ void nightgame(void)
 			}
 
 			// 플레이어의 스태미나가 0이면 탈락처리
-			/*if ((player[i].stamina == 0) && (player[i].is_alive == true))
+			/*if ((player[i].stamina == 0) && (player[i].is_alive[0] == true))
 			{
 				n_alive--;
 				print_addi_status(1, i, -1);
-				player[i].is_alive = false;
+				player[i].is_alive[0] = false;
 			}*/
 		}
 		display();

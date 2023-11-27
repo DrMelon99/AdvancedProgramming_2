@@ -53,11 +53,11 @@ void move_tail_mugunghwa(int player, int nx, int ny);
 void younghee(void);
 
 /* "야간운동" 영역 */
-// ♨ "야간운동" 메인
+// ★ "야간운동" 메인
 void nightgame(void);
 // ★ "야간운동" 초기 설정
 void nightgame_init(void);
-// ♨ "야간운동" NPC 움직임 정의
+// ★ "야간운동" NPC 움직임 정의
 void npc_move_nightgame(void);
 // ★ "야간운동" 아이템 시각화
 void nightgame_item_visable(void);

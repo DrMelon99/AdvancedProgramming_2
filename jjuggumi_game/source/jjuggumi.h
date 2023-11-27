@@ -17,13 +17,11 @@
 
 bool player_statuspost[PLAYER_MAX];
 
-// int px[PLAYER_MAX], py[PLAYER_MAX], period[PLAYER_MAX];  // 각 플레이어 위치, 이동 주기
-
 int player_outlist[PLAYER_MAX];
 int n_player, n_alive, n_alivepost; // 플레이어 수, 살아남은 플레이어 수, 이전 대조값
 int n_item;
-int game_round;
-int debug_i, debug_j, debug_k;
+int game_round; // 현재 게임 라운드 수
+int debug_i, debug_j, debug_k; // 디버깅 전용 변수
 
 int tick[2];  // 시계
 
@@ -45,7 +43,8 @@ typedef struct {
 	int period; // 플레이어 이동주기
 	char name[100]; // 플레이어 이름
 	int intel, str, stamina; // 플레이어 지능, 힘, 스태미나
-	bool is_alive, hasitem, is_pass; // 플레이어 생존 여부, 아이템 소지여부, 게임통과 여부
+	bool is_alive[2]; // 플레이어 생존 여부 0: 현재, 1: 이전 표시 대조 값
+	bool hasitem, is_pass; // 아이템 소지여부, 게임통과 여부
 	int interact_timestamp; // 상호작용 쿨타임
 	ITEM item; // 플레이어가 가지고 있는 아이템 정보
 } PLAYER;

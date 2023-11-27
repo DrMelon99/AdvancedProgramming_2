@@ -47,7 +47,7 @@ void print_status(void)
 		enline(2, 40);
 		for (int p = 0; p < n_player; p++)
 		{
-			printf("Player%2d: %s\n", p, player[p].is_alive ? "ALIVE" : "DEAD");
+			printf("Player%2d: %s\n", p, player[p].is_alive[0] ? "ALIVE" : "DEAD");
 		}
 	}
 	else if (game_round == 2) // "야간게임"
@@ -57,7 +57,7 @@ void print_status(void)
 		printf("\t\t intl\tstr\tstm\n");
 		for (int p = 0; p < n_player; p++)
 		{
-			printf("Player%2d: %s\t %2d(%+2d)\t%2d(%+2d)\t%3d%%", p, player[p].is_alive ? "ALIVE" : "DEAD ", player[p].intel, player[p].item.intel_buf, player[p].str, player[p].item.str_buf, player[p].stamina);
+			printf("Player%2d: %s\t %2d(%+2d)\t%2d(%+2d)\t%3d%%", p, player[p].is_alive[0] ? "ALIVE" : "DEAD ", player[p].intel, player[p].item.intel_buf, player[p].str, player[p].item.str_buf, player[p].stamina);
 			printf("\thas item :%s, item id: [%d]", player[p].hasitem ? "YES" : "NO ", player[p].item.id);
 			printf("\n");
 		}
@@ -70,7 +70,7 @@ void print_status(void)
 		enline(2, 40);
 		for (int p = 0; p < n_player; p++)
 		{
-			printf("Player%2d: %s\n", p, player[p].is_alive ? "ALIVE" : "ALIVE*");
+			printf("Player%2d: %s\n", p, player[p].is_alive[0] ? "ALIVE" : "ALIVE*");
 		}
 	}
 	else if (game_round == 4) // "제비뽑기"
@@ -163,7 +163,7 @@ void print_addi_status(int opt, int p1, int p2)
 	}
 	else if (opt == 2) // "무궁화 꽃이 피었습니다"
 	{
-		
+		/*여기에 이전 younghee의 코드 내용을 리팩토링 후 옮길 것*/
 	}
 	else if (opt == 3)
 	{
@@ -202,9 +202,9 @@ void print_addi_status(int opt, int p1, int p2)
 
 void dialog(int opt, int data)
 {
-	char time_ment[24] = "Game starts in n seconds"; // 'n' = 15
-	char start_ment[16] = "!! GAME START !!";
-	char out_ment[16] = "!! PLAYER OUT !!";
+	char time_ment[24] = "Game starts in n seconds"; // 게임 시작 타이머
+	char start_ment[16] = "!! GAME START !!"; // 게임 시작 타이머 0초
+	char out_ment[13] = "PLAYER OUT !!"; // "무궁화 꽃이 피었습나다" 전용 탈락 화면
 	char item_exchange[26] = "Want to exchange an item??";
 	char select_ment[17] = "(SPACE to Select)";
 	char fight_ment[30] = "Do you want to fight Player n?";
