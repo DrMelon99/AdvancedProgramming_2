@@ -40,11 +40,11 @@ void gotoxy(int row, int col)
 
 void print_status(void)
 {
-	enline(2, 40);
 	if (game_round == 1) // "무궁화 꽃이 피었습니다"
 	{
-		printf("no. of Players left: %2d\n", n_alive);
-		enline(2, 40);
+		enline(2, 60);
+		printf("no. of Players left: %2d", n_alive);
+		enline(1, 60);
 		for (int p = 0; p < n_player; p++)
 		{
 			printf("Player%2d: %s\n", p, player[p].is_alive[0] ? "ALIVE" : "DEAD");
@@ -52,22 +52,24 @@ void print_status(void)
 	}
 	else if (game_round == 2) // "야간게임"
 	{
-		printf("no. of Players left: %2d\n", n_alive);
-		enline(2, 40);
+		enline(2, 80);
+		printf("no. of Players left: %2d", n_alive);
+		enline(3, 80);
 		printf("\t\t intl\tstr\tstm\n");
 		for (int p = 0; p < n_player; p++)
 		{
 			printf("Player%2d: %s\t %2d(%+2d)\t%2d(%+2d)\t%3d%%", p, player[p].is_alive[0] ? "ALIVE" : "DEAD ", player[p].intel, player[p].item.intel_buf, player[p].str, player[p].item.str_buf, player[p].stamina);
-			printf("\thas item :%s, item id: [%d]", player[p].hasitem ? "YES" : "NO ", player[p].item.id);
+			// printf("\thas item :%s, item id: [%d], period: %03d", player[p].hasitem ? "YES" : "NO ", player[p].item.id, player[p].period);
 			printf("\n");
 		}
 	}
 	else if (game_round == 3) // "줄다리기"
 	{
+		enline(2, 32);
 		printf("str:\t%+d", 0);
-		enline(2, 40);
-		printf("no. of Players left: %2d\n", n_alive);
-		enline(2, 40);
+		enline(1, -1);
+		printf("no. of Players left: %2d", n_alive);
+		enline(3, 32);
 		for (int p = 0; p < n_player; p++)
 		{
 			printf("Player%2d: %s\n", p, player[p].is_alive[0] ? "ALIVE" : "ALIVE*");
@@ -75,6 +77,7 @@ void print_status(void)
 	}
 	else if (game_round == 4) // "제비뽑기"
 	{
+		enline(2, 34);
 		printf("[Round %d] Turn: Player %d\n", count, ingame_exchange_data);
 	}
 
@@ -95,7 +98,7 @@ void map_init(int n_row, int n_col)
 	N_COL = n_col;
 
 	for (int i = 0; i < N_ROW; i++)
-	{
+	{	
 		back_buf[i][0] = back_buf[i][N_COL - 1] = '*';
 
 		for (int j = 1; j < N_COL - 1; j++)
@@ -216,14 +219,14 @@ void dialog(int opt, int data)
 	memory_front_buf();
 
 	if (opt == 0) // 카운트 다운 다이얼로그
-	{
-		for (int t = 4; t > -2; t--)
+	{	
+		for (int t = 3; t > -2; t--)
 		{
-			Dialog_start_ROW = (N_ROW - 6) / 2;
+			Dialog_start_ROW = (N_ROW - 5) / 2;
 
 			if (t > 0)
 			{
-				Dialog_start_COL = (N_COL / 2) - 13;
+				Dialog_start_COL = (N_COL / 2) - 14;
 
 				for (int i = 0; i < 5; i++)
 				{
@@ -238,6 +241,7 @@ void dialog(int opt, int data)
 						{
 							back_buf[Dialog_start_ROW + i][Dialog_start_COL + j] = time_ment[j - 2];
 							back_buf[Dialog_start_ROW + i][Dialog_start_COL + 17] = '0' + t;
+
 							if (t == 1 && j == 25)
 							{
 								back_buf[Dialog_start_ROW + i][Dialog_start_COL + j] = ' ';
@@ -247,13 +251,13 @@ void dialog(int opt, int data)
 				}
 				
 				display();
-				Beep(SOUND_C / 2, 500);
-				Sleep(500);
+				Beep(SOUND_C / 2, 100);
+				Sleep(900);
 			}
 			else if (t == 0) // "GAME START" 다이얼로그
 			{
 				restore_front_buf();
-				Dialog_start_COL = (N_COL / 2) - 9;
+				Dialog_start_COL = (N_COL / 2) - 10;
 
 				for (int i = 0; i < 5; i++)
 				{
@@ -271,8 +275,8 @@ void dialog(int opt, int data)
 					}
 				}
 				display();
-				Beep(SOUND_C, 500);
-				Sleep(500);
+				Beep(SOUND_C, 100);
+				Sleep(900);
 			}
 			else
 			{
@@ -333,10 +337,12 @@ void dialog(int opt, int data)
 
 			if ((key == K_LEFT) || (key == K_RIGHT))
 			{
+				Beep(SOUND_D, 5);
 				get_item = !get_item;
 			}
 			else if (key == K_SPACE)
 			{
+				Beep(SOUND_D * 2, 5);
 				break;
 			}
 
@@ -416,6 +422,7 @@ void dialog(int opt, int data)
 
 			if (key == K_UP)
 			{
+				Beep(SOUND_D, 5);
 				if (fight == 0)
 				{
 					fight = 2;
@@ -427,6 +434,7 @@ void dialog(int opt, int data)
 			}
 			else if (key == K_DOWN)
 			{
+				Beep(SOUND_D, 5);
 				if (fight == 2)
 				{
 					fight = 0;
@@ -438,6 +446,7 @@ void dialog(int opt, int data)
 			}
 			else if (key == K_SPACE)
 			{
+				Beep(SOUND_D * 2, 5);
 				break;
 			}
 

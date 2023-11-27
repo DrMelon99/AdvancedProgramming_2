@@ -15,25 +15,25 @@
 #define SOUND_Asharp 1864.655 // 라#
 #define SOUND_B 1975.533 // 시
 
-// low 이상 high 이하 난수를 발생시키는 함수
+// ★ low 이상 high 이하 난수를 발생시키는 함수
 int randint(int low, int high);
 
-// 줄바꿈 기능
+// ★ 줄바꿈 기능
 void enline(int n, int m);
 
-// 인트로 타이틀 아스키 아트
+// ★ 인트로 타이틀 아스키 아트
 void introtitle(int n);
 
-// 음악 재생 함수
+// ★ 음악 재생 함수
 void titlesong(void);
 
-// 무궁화 꽃이 피었습니다 노래 재생 함수
+// ★ 무궁화 꽃이 피었습니다 노래 재생 함수
 void mugunghwasong(int sound);
 
-// 콘솔 창의 폰트 크기 조정
+// ★ 콘솔 창의 폰트 크기 조정
 void SetConsoleFontSize(int size);
 
-// 콘솔 커서 숨김
+// ★ 콘솔 커서 숨김
 void system_cursor(void);
 
 #endif

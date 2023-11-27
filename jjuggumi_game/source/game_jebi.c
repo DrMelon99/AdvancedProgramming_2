@@ -8,8 +8,7 @@ void jebi(void)
 
 	while (1) // 게임 진행 루프
 	{
-		if (player_control())
-			break;
+
 
 		display();
 		Sleep(10);
@@ -23,6 +22,8 @@ void jebi_init(void)
 
 	system("cls");
 
+	map_init(7, 34);
+
 	SetConsoleFontSize(20);
-	system("mode con: cols=80 lines=50");
+	system("mode con: cols=34 lines=15");
 }

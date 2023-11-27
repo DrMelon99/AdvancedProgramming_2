@@ -1,9 +1,2 @@
-﻿  jjuggumi.c
-  keyin.c
-  sample.c
-D:\dev\AdvancedProgramming_2\jjuggumi_game\source\sample.c(9,31): warning C4028: 정식 매개 변수 1이(가) 선언과 다릅니다.
-D:\dev\AdvancedProgramming_2\jjuggumi_game\source\sample.c(9,31): warning C4142: 'player_control': 형식이 재정의되었지만 심각하지는 않습니다.
-D:\dev\AdvancedProgramming_2\jjuggumi_game\source\games.h(33,6): message : 'player_control' 선언을 참조하십시오.
-  코드를 생성하고 있습니다...
-  LINK : D:\dev\AdvancedProgramming_2\jjuggumi_game\x64\Debug\jjuggumi_game.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
+﻿  game_jebi.c
   jjuggumi_game.vcxproj -> D:\dev\AdvancedProgramming_2\jjuggumi_game\x64\Debug\jjuggumi_game.exe

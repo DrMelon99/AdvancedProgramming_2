@@ -331,7 +331,7 @@ void npc_move_nightgame(void)
 					for (int k = 0; k < n_item && !found; k++)
 					{
 						if ((player[p].px + i == item[k].ix) && (player[p].py + j == item[k].iy) &&
-							(player[p].hasitem == false) && (item[k].getable == true))
+							((player[p].hasitem == false) || (player[p].stamina == 0)) && (item[k].getable == true))
 						{
 							if (i < 0)
 								nx = player[p].px - 1;
@@ -358,7 +358,7 @@ void npc_move_nightgame(void)
 					for (int k = 0; k < n_player && !found; k++)
 					{
 						if ((player[p].px + i == player[k].px) && (player[p].py + j == player[k].py) &&
-							(player[k].hasitem == true) && (player[k].is_alive[0] == true))
+							(player[k].hasitem == true) && (player[k].is_alive[0] == true) && (player[k].stamina > 0))
 						{
 							if (i < 0)
 								nx = player[p].px - 1;

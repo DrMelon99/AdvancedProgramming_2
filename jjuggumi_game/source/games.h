@@ -21,7 +21,6 @@
 #define NIGHTGAME_ALART1 "Player n obtained an item"
 #define NIGHTGAME_ALART2 "Player n steals an item from Player n"
 
-
 bool yh_killmode, get_item;
 int fight;
 int count;

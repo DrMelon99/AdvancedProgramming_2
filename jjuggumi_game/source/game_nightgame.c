@@ -17,7 +17,7 @@ void nightgame(void)
 
 		nightgame_item_visable();
 
-		if (tick[0] - tick[1] > 1000)
+		if (tick[0] - tick[1] > 2000)
 			print_addi_status(0, -1, -1);
 
 		for (int i  = 0; i < n_player; i++)
@@ -318,7 +318,7 @@ void nightgame_init(void)
 
 		player[i].px = x;
 		player[i].py = y;
-		player[i].period = randint(100, 200);
+		player[i].period = randint(50, 100);
 
 		back_buf[player[i].px][player[i].py] = '0' + i;  // (0 .. n_player-1)
 	}

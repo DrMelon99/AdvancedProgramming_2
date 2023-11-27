@@ -5,13 +5,15 @@ void juldarigi(void)
 	juldarigi_init();
 
 	dialog(0, -1);
+	
+	system("cls");
 
+	map_init(3, 32);
+		
 	while (1) // 게임 진행 루프
 	{
 		if (player_control())
 			break;
-
-		player_visable();
 
 		display();
 		Sleep(10);
@@ -25,6 +27,8 @@ void juldarigi_init(void)
 
 	system("cls");
 
+	map_init(9, 32);
+
 	SetConsoleFontSize(20);
-	system("mode con: cols=80 lines=50");
+	system("mode con: cols=32 lines=30");
 }
