@@ -1,5 +1,16 @@
 #include "games.h"
 
+void initializePlayerItem(ITEM* item) {
+	item->id = 0;
+	item->name[0] = '\0';  // 빈 문자열로 초기화
+	item->getable = false;
+	item->ix = 0;
+	item->iy = 0;
+	item->intel_buf = 0;
+	item->str_buf = 0;
+	item->stamina_buf = 0;
+}
+
 void juldarigi(void)
 {
 	juldarigi_init();
@@ -12,27 +23,22 @@ void juldarigi(void)
 		
 	while (1) // 게임 진행 루프
 	{
-		for (int i = 0; i < 8; i++) { 
+		for (int i = 0; i < 8; i++) { // 패자 부활 
+			player[i].is_alive[1] = player[i].is_alive[0];
 			if (player[i].is_alive[0] == false) {
-				player[i].hasitem = false;
-				player[i].stamina = 1;
+				player[i].is_alive[0] = true;
 			}
 		}
-		for (int i = 0; i < 8; i++) {
-			if (player[i].stamina == 0) {
-				if (player[i].is_alive[0] == true) {
-					player[i].is_pass = false;
-					player[i].hasitem = false;
 
+
+		for (int i = 0; i < 8; i++) { // 게임 끝난 후 
+			if (player[i].stamina == 0) { 
+				// stamina = 0 이면 player[i].is_alive[0] == false인데 
+				// player[i].is_alive[1] == true일시 패자부활전에서는 탈락 안함 그냥 이렇게만 해줘도? 
+				if (player[i].is_alive[1] == true) {
 					initializePlayerItem(&(player[i].item));
-
 				}
-			}
-			else {
-				if (player[i].is_alive[0] == false) {
-					player[i].is_pass = true;
-					player[i].is_alive[0] = true;
-				}
+				// player[i].is_alive[1] == false는 따로 수정 안해줘도? 
 			}
 
 		}
