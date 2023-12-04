@@ -12,8 +12,30 @@ void juldarigi(void)
 		
 	while (1) // 게임 진행 루프
 	{
+		for (int i = 0; i < 8; i++) { 
+			if (player[i].is_alive[0] == false) {
+				player[i].hasitem = false;
+				player[i].stamina = 1;
+			}
+		}
+		for (int i = 0; i < 8; i++) {
+			if (player[i].stamina == 0) {
+				if (player[i].is_alive[0] == true) {
+					player[i].is_pass = false;
+					player[i].hasitem = false;
 
+					initializePlayerItem(&(player[i].item));
 
+				}
+			}
+			else {
+				if (player[i].is_alive[0] == false) {
+					player[i].is_pass = true;
+					player[i].is_alive[0] = true;
+				}
+			}
+
+		}
 
 		display();
 		Sleep(10);
