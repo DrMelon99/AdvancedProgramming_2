@@ -38,7 +38,9 @@ void juldarigi(void)
 				if (player[i].is_alive[1] == true) {
 					initializePlayerItem(&(player[i].item));
 				}
-				// player[i].is_alive[1] == false는 따로 수정 안해줘도? 
+				else {
+					player[i].is_alive[0] == false;
+				}
 			}
 
 		}
