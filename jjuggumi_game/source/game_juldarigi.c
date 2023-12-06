@@ -19,7 +19,7 @@ void juldarigi(void)
 	
 	system("cls");
 
-	map_init(3, 32);
+	map_init_juldarigi(3, 32);
 		
 	while (1) // 게임 진행 루프
 	{
@@ -39,7 +39,7 @@ void juldarigi(void)
 					initializePlayerItem(&(player[i].item));
 				}
 				else {
-					player[i].is_alive[0] == false;
+					player[i].is_alive[0] = false;
 				}
 			}
 
@@ -49,7 +49,39 @@ void juldarigi(void)
 		Sleep(10);
 		tick[0] += 10;
 	}
-}
+}  
+
+/*void map_init_juldarigi(int n_row, int n_col)
+{
+	for (int i = 0; i < ROW_MAX; i++)
+	{
+		for (int j = 0; j < COL_MAX; j++)
+		{
+			back_buf[i][j] = front_buf[i][j] = ' ';
+		}
+	}ㅍ
+
+	N_ROW = n_row;
+	N_COL = n_col;
+
+	for (int i = 0; i < N_ROW; i++)
+	{
+		back_buf[i][0] = back_buf[i][N_COL - 1] = '*';
+
+		for (int j = 1; j < N_COL - 1; j++)
+		{
+			// 가운데 뚫린 부분을 공백으로 채우기
+			back_buf[i][j] = (i == 0 || i == N_ROW - 1) ? '*' : ' ';
+		}
+	}
+
+	// 중앙 행에 대한 가운데 뚫린 부분을 공백으로 설정
+	int center_row = N_ROW / 2;
+	for (int j = 1; j < N_COL - 1; j++)
+	{
+		back_buf[center_row][j] = ' ';
+	}
+}*/
 
 void juldarigi_init(void)
 {
@@ -57,7 +89,7 @@ void juldarigi_init(void)
 
 	system("cls");
 
-	map_init(9, 32);
+	map_init_juldarigi(9, 32);
 
 	SetConsoleFontSize(20);
 	system("mode con: cols=32 lines=30");
