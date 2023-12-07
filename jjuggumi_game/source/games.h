@@ -73,6 +73,8 @@ void nightgame_item_visable(void);
 void juldarigi(void);
 // ♨ "줄다리기" 초기 설정
 void juldarigi_init(void);
+// ♨ "줄다리기" 게임 화면 - 내가 만든 것(보류) 
+void map_init_juldarigi(int n_row, int n_col);
 
 /* "제비뽑기" 영역 */
 // ♨ "제비뽑기" 메인
