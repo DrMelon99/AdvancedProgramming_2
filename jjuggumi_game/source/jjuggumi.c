@@ -17,7 +17,7 @@ int main(void)
 	// nightgame(); // 야간운동
 	// juldarigi(); // 줄다리기
 	jebi(); // 제비 뽑기
-	// ending(); // 쭈꾸미 게임 엔딩
+	ending(); // 쭈꾸미 게임 엔딩
 
 	return 0;
 }

@@ -456,9 +456,57 @@ void dialog(int opt, int data)
 		restore_front_buf();
 		display();
 	}
-	else if (opt == 4) // "제비뽑기" n번째 플레이어의 <통과 / 탈락> 판정 결과 출력 다이얼로그
+	else if (opt == 4) // "제비뽑기" n번째 플레이어의 <통과> 판정 결과 출력 다이얼로그
 	{
+		char jb_pment[14] = "Player n pass!";
 
+		Dialog_start_ROW = 3;
+		Dialog_start_COL = 1;
+		for (int i = 0; i < 28; i++) {
+			back_buf[Dialog_start_COL][Dialog_start_ROW + i] = '+';
+			back_buf[Dialog_start_COL + 1][Dialog_start_ROW + i] = ' ';
+			back_buf[Dialog_start_COL + 2][Dialog_start_ROW + i] = ' ';
+			back_buf[Dialog_start_COL + 3][Dialog_start_ROW + i] = ' ';
+			back_buf[Dialog_start_COL + 4][Dialog_start_ROW + i] = '+';
+		}
+		for (int i = 0; i < 5; i++) {
+			back_buf[Dialog_start_COL + i][Dialog_start_ROW] = '+';
+			back_buf[Dialog_start_COL + i][Dialog_start_ROW +27] = '+';
+		}
+		for (int i = 0; i < 14; i++) {
+			back_buf[Dialog_start_COL + 2][Dialog_start_ROW + 7 + i] = jb_pment[i];
+			back_buf[Dialog_start_COL + 2][Dialog_start_ROW + 7 + 7] = '0' + data;
+		}
+
+		display();
+		Sleep(1000);
+		restore_front_buf();
+	}
+	else if (opt == 5) // "제비뽑기" n번째 플레이어의 <탈락> 판정 결과 출력 다이얼로그
+	{
+		char jb_fment[14] = "Player n fail!";
+
+		Dialog_start_ROW = 3;
+		Dialog_start_COL = 1;
+		for (int i = 0; i < 28; i++) {
+			back_buf[Dialog_start_COL][Dialog_start_ROW + i] = '+';
+			back_buf[Dialog_start_COL + 1][Dialog_start_ROW + i] = ' ';
+			back_buf[Dialog_start_COL + 2][Dialog_start_ROW + i] = ' ';
+			back_buf[Dialog_start_COL + 3][Dialog_start_ROW + i] = ' ';
+			back_buf[Dialog_start_COL + 4][Dialog_start_ROW + i] = '+';
+		}
+		for (int i = 0; i < 5; i++) {
+			back_buf[Dialog_start_COL + i][Dialog_start_ROW] = '+';
+			back_buf[Dialog_start_COL + i][Dialog_start_ROW + 27] = '+';
+		}
+		for (int i = 0; i < 14; i++) {
+			back_buf[Dialog_start_COL + 2][Dialog_start_ROW + 7 + i] = jb_fment[i];
+			back_buf[Dialog_start_COL + 2][Dialog_start_ROW + 7 + 7] = '0' + data;
+		}
+
+		display();
+		Sleep(1000);
+		restore_front_buf();
 	}
 }
 

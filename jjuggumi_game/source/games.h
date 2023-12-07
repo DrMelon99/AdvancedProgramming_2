@@ -27,6 +27,13 @@ int count;
 int x, y;
 int ingame_exchange_data;
 
+int picked_jb, unpicked_jb;
+int jb_pf[10]; // 제비 당첨 여부
+int pl_cnt, r1; // 플레이어, 라운드 1
+int jb_num;
+int pl_now[10];
+int jb_cnt, p_cnt;
+
 /* 공통 영역 */
 // ★ 사용자 움직임 정의
 bool player_control(void);
@@ -74,5 +81,10 @@ void map_init_juldarigi(int n_row, int n_col);
 void jebi(void);
 // ♨ "제비뽑기" 초기 설정
 void jebi_init(void);
-
+//제비 섞기
+void jebi_mix(int[]);
+//제비 고르는 순서 정하기
+void player_mix(int[]);
+//제비 뽑기 조작
+bool pick_jebi();
 #endif
