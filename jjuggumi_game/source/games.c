@@ -414,3 +414,110 @@ void nightgame_item_visable(void)
 		}
 	}
 }
+
+void jebi_mix(int jb[]) {
+	int mix = 0;
+	do {
+		for (int i = 0; i < n_alive; i++) {
+			jb[i] = 1;
+		}
+		for (int i = n_alive; i < 10; i++) {
+			jb[i] = 0;
+		}
+		mix = randint(0, n_alive);
+		jb[mix] = 2;
+	} while (jb[n_alive] != 0);
+}
+
+void player_mix(int pl[]) {
+	for (int i = 0; i < n_alive; i++)
+	{
+		pl[i] = randint(0, n_player);
+		if (player[pl[i]].is_alive[0] == false) {
+			i--;
+		}
+		else {
+			for (int j = 0; j < i; j++) {
+				if (pl[j] == pl[i]) { i--; break; }
+			}
+		}
+	}
+}
+
+bool pick_jebi() {
+	key_t key = get_key();
+	if (key == K_QUIT) {
+		return true;
+	}
+	else if (key == K_SPACE) {
+		if (jb_pf[jb_num] == 1)					//pass
+		{
+			dialog(4, player[pl_now[pl_cnt]].id);
+			pl_cnt++; jb_cnt--;
+
+			for (int i = jb_num; i < jb_cnt; i++) {
+				jb_pf[i] = jb_pf[i + 1];
+			}
+			back_buf[3][unpicked_jb] = ' ';
+			back_buf[3][picked_jb] = ' ';
+
+			picked_jb = 3;
+			jb_num = (picked_jb - 3) / 3;
+
+			ingame_exchange_data = player[pl_now[pl_cnt]].id;
+			p_cnt++;
+			return false;
+		}
+		else if (jb_pf[jb_num] == 2)			//fail 
+		{
+			dialog(5, player[pl_now[pl_cnt]].id);
+
+			player[pl_now[pl_cnt]].is_alive[0] = false;
+			count++;
+			n_alive--;
+			jb_cnt--; pl_cnt = 0;
+			back_buf[3][picked_jb] = ' ';
+
+			if (p_cnt != 0) {
+				unpicked_jb = 0;
+				for (int i = jb_num; i < jb_cnt; i++) {
+					unpicked_jb += 3;
+					back_buf[3][unpicked_jb] = '?';
+				}
+				jb_cnt += p_cnt;
+			}
+			else {
+				back_buf[3][unpicked_jb] = ' ';
+			}
+
+			picked_jb = 3;
+			jb_num = (picked_jb - 3) / 3;
+
+			player_mix(pl_now);
+			jebi_mix(jb_pf);
+			ingame_exchange_data = player[pl_now[pl_cnt]].id;
+			p_cnt = 0;
+			return false;
+		}
+	}
+	else if (key != K_UNDEFINED)
+	{
+		switch (key)
+		{
+		case K_LEFT:
+			picked_jb -= 3;
+			if (picked_jb <= 0) { picked_jb = unpicked_jb; }
+			back_buf[3][picked_jb] = '@';
+			jb_num = (picked_jb - 3) / 3;
+			return false;
+			break;
+		case K_RIGHT:
+			picked_jb += 3;
+			if (picked_jb > unpicked_jb) { picked_jb = 3; }
+			back_buf[3][picked_jb] = '@';
+			jb_num = (picked_jb - 3) / 3;
+			return false;
+			break;
+		}
+	}
+}
