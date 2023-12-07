@@ -51,7 +51,7 @@ void juldarigi(void)
 	}
 }  
 
-/*void map_init_juldarigi(int n_row, int n_col)
+void map_init_juldarigi(int n_row, int n_col)
 {
 	for (int i = 0; i < ROW_MAX; i++)
 	{
@@ -59,7 +59,7 @@ void juldarigi(void)
 		{
 			back_buf[i][j] = front_buf[i][j] = ' ';
 		}
-	}ㅍ
+	}
 
 	N_ROW = n_row;
 	N_COL = n_col;
@@ -75,13 +75,13 @@ void juldarigi(void)
 		}
 	}
 
-	// 중앙 행에 대한 가운데 뚫린 부분을 공백으로 설정
-	int center_row = N_ROW / 2;
-	for (int j = 1; j < N_COL - 1; j++)
+	// 중앙 열 가운데 뚫린 부분을 공백으로 설정  - 이부분 구현이 안됨..
+	int center_col = N_COL / 2;
+	for (int i = 1; i < N_ROW - 1; i++)
 	{
-		back_buf[center_row][j] = ' ';
+		back_buf[i][center_col] = ' ';
 	}
-}*/
+}
 
 void juldarigi_init(void)
 {
