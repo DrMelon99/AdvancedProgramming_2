@@ -28,7 +28,6 @@
     <ClCompile Include="source\jjuggumi.c" />
     <ClCompile Include="source\keyin.c" />
     <ClCompile Include="source\miscellaneous.c" />
-    <ClCompile Include="source\sample.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\canvas.h" />

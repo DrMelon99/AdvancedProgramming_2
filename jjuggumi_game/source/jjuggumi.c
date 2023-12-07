@@ -12,17 +12,17 @@
 int main(void)
 {
 	jjuggumi_init();
-	// intro(); // 쭈꾸미 게임 인트로
-	// mugunghwa(); // 무궁화 꽃이 피었습니다
-	// nightgame(); // 야간운동
-	// juldarigi(); // 줄다리기
+	intro(); // 쭈꾸미 게임 인트로
+	mugunghwa(); // 무궁화 꽃이 피었습니다
+	nightgame(); // 야간운동
+	juldarigi(); // 줄다리기
 	jebi(); // 제비 뽑기
-	// ending(); // 쭈꾸미 게임 엔딩
+	ending(); // 쭈꾸미 게임 엔딩
 
 	return 0;
 }
 
-int jjuggumi_init(void)
+void jjuggumi_init(void)
 {
 	system_cursor();
 
@@ -57,24 +57,6 @@ int jjuggumi_init(void)
 		// 현재 상태
 		p->is_alive[0] = p->is_alive[1] = true;
 		p->hasitem = false;
-
-		/*if (i == 0)
-		{
-			do
-			{
-				printf("0번째 플레이어인 당신은 %s(이)가 맞습니까?\n(y / n) >> ", p->name);
-				scanf_s(" %c", &start_option, 1);
-
-				if (start_option == 'n')
-				{
-					printf("0번째 플레이어 이름 편집\n");
-					printf("이름>> ");
-					scanf_s(" %s", &p->name, 50);
-				}
-
-
-			} while ((start_option != 'y'));
-		}*/
 	}
 
 	// 아이템 데이터 load
@@ -92,18 +74,9 @@ int jjuggumi_init(void)
 	}
 	fclose(fp);
 
-	/*for (int i = 0; i < n_player; i++)
-	{
-		printf("번호: %d\n이름: %s\n지능: %d\n힘: %d\n스태미나:%d\n생존여부: %d\n\n", player[i].id, player[i].name, player[i].intel, player[i].str, player[i].stamina, player[i].is_alive[0]);
-	}
-	for (int i = 0; i < n_item; i++)
-	{
-		printf("아이템 이름: %s\n지능 버프: %d\n힘 버프: %d\n스태미나 버프: %d\n\n", item[i].name, item[i].intel_buf, item[i].str_buf, item[i].stamina_buf);
-	}*/
+	debug_toggle = false;
 
 	tick[0] = 0;
-
-	return 0;
 }
 
 void intro(void)
@@ -122,29 +95,26 @@ void ending(void)
 
 	if (n_alive == 1)
 	{
-		printf("최종 우승자");
-		enline(3, 15);
+		printf("====WINNER====");
+		enline(3, 14);
 		for (int i = 0; i < n_player; i++)
 		{
 			if (player[i].is_alive[0])
-			{
-				printf("%d번 플레이어\n", i);
-			}
+				printf("!!Player %d!! \n", i);
 		}
-		enline(2, 15);
+		enline(2, 14);
 	}
 	else
 	{
-		printf("생존자 목록");
-		enline(3, 15);
+		printf("우승자를 가리지 못했습니다.\n");
+		printf("===SURVIVOR LIST===");
+		enline(1, 1);
 		for (int i = 0; i < n_player; i++)
 		{
 			if (player[i].is_alive[0])
-			{
-				printf("%d번 플레이어\n", i);
-			}
+				printf("Player %d\n", i);
 		}
-		enline(2, 15);
+		enline(2, 19);
 	}
 }
 

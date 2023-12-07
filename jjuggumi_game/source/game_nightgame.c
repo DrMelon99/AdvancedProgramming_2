@@ -8,6 +8,7 @@ void nightgame(void)
 
 	while (1) // 게임 진행 루프
 	{
+		// 'q'를 누르거나, 생존 인원이 한명일 경우
 		if (player_control() || (n_alive == 1))
 			break;
 		
@@ -280,14 +281,6 @@ void nightgame(void)
 					player[i].interact_timestamp = player[j].interact_timestamp = tick[1] = tick[0];
 				}
 			}
-
-			// 플레이어의 스태미나가 0이면 탈락처리
-			/*if ((player[i].stamina == 0) && (player[i].is_alive[0] == true))
-			{
-				n_alive--;
-				print_addi_status(1, i, -1);
-				player[i].is_alive[0] = false;
-			}*/
 		}
 		display();
 		Sleep(10);
@@ -304,23 +297,26 @@ void nightgame_init(void)
 	system("cls");
 
 	SetConsoleFontSize(20);
-	system("mode con: cols=80 lines=50");
+	system("mode con: cols=80 lines=60");
 
 	map_init(25, 80);
 
 	for (int i = 0; i < n_player; i++) // 플레이어 배치
 	{
-		do
+		if (player[i].is_alive[0] == true)
 		{
-			x = randint(1, N_ROW - 2);
-			y = randint(1, N_COL - 2);
-		} while (!placable(x, y));
+			do
+			{
+				x = randint(1, N_ROW - 2);
+				y = randint(1, N_COL - 2);
+			} while (!placable(x, y));
 
-		player[i].px = x;
-		player[i].py = y;
-		player[i].period = randint(50, 100);
+			player[i].px = x;
+			player[i].py = y;
+			player[i].period = randint(50, 100);
 
-		back_buf[player[i].px][player[i].py] = '0' + i;  // (0 .. n_player-1)
+			back_buf[player[i].px][player[i].py] = '0' + i;  // (0 .. n_player-1)
+		}
 	}
 
 	for (int i = 0; i < n_item ; i++) // 아이템 배치
@@ -338,6 +334,8 @@ void nightgame_init(void)
 	nightgame_item_visable();
 
 	display();
+
+	debug_toggle = false;
 
 	tick[0] = 0;
 }

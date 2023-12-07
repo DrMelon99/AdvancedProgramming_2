@@ -35,5 +35,4 @@ void SetConsoleFontSize(int size);
 
 // ¡Ú ÄÜ¼Ö Ä¿¼­ ¼û±è
 void system_cursor(void);
-
 #endif

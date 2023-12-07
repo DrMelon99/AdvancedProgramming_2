@@ -19,6 +19,8 @@ char temp_buf[ROW_MAX][COL_MAX];
 // 맵 크기(위의 buf는 텍스트까지 포함한 캔버스 크기)
 int N_ROW, N_COL;
 
+bool debug_toggle;
+
 // ★ 상단에 맵을, 하단에는 현재 상태를 출력
 void display(void);
 // ★ 변경점이 있는 맵 좌표에 출력
@@ -40,10 +42,10 @@ void memory_front_buf(void);
 void restore_front_buf(void);
 // 추가 정보 출력
 void print_addi_status(int opt, int p, int data);
-// ♨ 입력된 opt에 따른 다이얼로그 출력
+// ★ 입력된 opt에 따른 다이얼로그 출력
 void dialog(int opt, int data);
 
-// ★ 디버깅을 하기 위한 모든 데이터를 트래킹하여 출력
-void debug(void);
+// ★ 두 버퍼를를 완전히 비우고 맵의 외곽을 '*'로 구성 (게임 초기 설정 시 실행) (줄다리기 전용)
+void map_init_juldarigi(int n_row, int n_col);
 
 #endif

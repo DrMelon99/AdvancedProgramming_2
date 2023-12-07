@@ -23,7 +23,7 @@ int n_item;
 int game_round; // 현재 게임 라운드 수
 int debug_i, debug_j, debug_k; // 디버깅 전용 변수
 
-int tick[2];  // 시계
+int tick[3];  // 시계
 
 int pass_n_player;
 
@@ -51,8 +51,10 @@ typedef struct {
 
 PLAYER player[PLAYER_MAX]; // 플레이어 배열 인덱스의 최대치를 PLAYER_MAX로 설정
 
+// const ITEM ITEM_DEFAULT = { 0, '\0', false, 0, 0, 0, 0, 0 }; // 플레이어 아이템 소지 기본 값
+
 // main() 시작 시 쭈꾸미 게임 플레이어 수를 입력 받음
-int jjuggumi_init(void);
+void jjuggumi_init(void);
 // [쭈꾸미 게임 인트로] 함수
 void intro(void);
 // [쭈꾸미 게임 엔딩] 함수

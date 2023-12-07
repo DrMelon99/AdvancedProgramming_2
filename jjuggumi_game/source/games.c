@@ -18,7 +18,7 @@ bool player_control(void)
 	{
 		return false;
 	}
-	else if ((key != K_UNDEFINED))
+	else if ((key == K_UP) || (key == K_DOWN) || (key == K_LEFT) || (key == K_RIGHT))
 	{
 		switch (key)
 		{
@@ -32,11 +32,26 @@ bool player_control(void)
 		int ny = player[0].py + dy[dir];
 
 		if (!placable(nx, ny))
-		{
 			return false;
-		}
-		move_tail(0, nx, ny);
 
+		if (game_round == 1)
+		{
+			if(player[0].is_alive[0] == true)
+				can_move_mugunghwa(0, nx, ny);
+		}
+		else
+		{
+			move_tail(0, nx, ny);
+		}
+		return false;
+	}
+	else if (key == K_DEBUG)
+	{
+		debug_toggle = !debug_toggle;
+		return false;
+	}
+	else
+	{
 		return false;
 	}
 }
@@ -113,200 +128,78 @@ void player_stamina(int p, int opt, int stamina_val)
 
 void npc_move_mugunghwa(void)
 {
-	int nx, ny;  // 다음에 놓일 자리
+	int nx, ny, move_rand;  // 다음에 놓일 자리
 
 	for (int p = 1; p < n_player; p++)
 	{
-		if (tick[0] % player[p].period == 0)
+		if ((tick[0] % player[p].period == 0) && (player[p].is_pass == false) && (player[p].is_alive[0] == true))
 		{
 			do
 			{
-				if (randint(0, 100) < 70) // NPC 앞으로 -> 70% / 영희의 킬모드가 켜질 경우 NPC 제자리 -> 70%
+				move_rand = randint(0, 1000);
+
+				if (move_rand < 900) // NPC 앞으로 -> 90% / 영희의 킬모드가 켜질 경우 NPC 제자리 -> 90%
 				{
 					nx = player[p].px;
-					if (yh_killmode == false)
-					{
-						ny = player[p].py - 1;
-					}
-					else
-					{
+					if (yh_killmode == true)
 						ny = player[p].py;
-					}
+					else
+						ny = player[p].py - 1;
 				}
-				else if (randint(0, 100) >= 70 && randint(0, 100) < 80) // NPC 위로 -> 10%
+				else if ((move_rand >= 900) && (move_rand < 930)) // NPC 위로 -> 3%
 				{
 					nx = player[p].px - 1;
 					ny = player[p].py;
 				}
-				else if (randint(0, 100) >= 80 && randint(0, 100) < 90) // NPC 아래로 -> 10%
+				else if ((move_rand >= 930) && (move_rand < 960)) // NPC 아래로 -> 3%
 				{
 					nx = player[p].px + 1;
 					ny = player[p].py;
 				}
-				else // NPC 제자리 -> 10% / 영희의 킬모드가 켜질 경우 NPC 앞으로 10%
+				else // NPC 제자리 -> 4% / 영희의 킬모드가 켜질 경우 NPC 앞으로 4%
 				{
 					nx = player[p].px;
-					if (yh_killmode == false)
-					{
-						ny = player[p].py;
-					}
-					else
-					{
+					if (yh_killmode == true)
 						ny = player[p].py - 1;
-					}
+					else
+						ny = player[p].py;
 				}
 			} while (!placable(nx, ny));
 
-			move_tail_mugunghwa(p, nx, ny);
+			can_move_mugunghwa(p, nx, ny);
 		}
 	}
 }
 
-void move_tail_mugunghwa(int p, int nx, int ny)
+void can_move_mugunghwa(int p, int nx, int ny)
 {
-	if ((yh_killmode == false) || ((back_buf[nx][ny] == back_buf[player[p].px][player[p].py]))) // 킬모드 꺼짐, 가만히 있음
+	for (int i = 0; i < n_player; i++) // 가려져 있으면 지나감
 	{
-		if ((ny == 1) || (ny == 2 && (nx > 5 && nx < 9))) // 통과하면 없애기
+		if ((player[i].is_pass == false) && (player[i].px == nx) && (player[i].py < ny))
 		{
-			pass_n_player++;
-			back_buf[nx][ny] = ' '; // 없애기
-			back_buf[player[p].px][player[p].py] = ' '; // 이동 전 흔적 지우기
-			player[p].px = nx;
-			player[p].py = ny;
-		}
-		else
-		{
-			back_buf[nx][ny] = back_buf[player[p].px][player[p].py]; // 이동
-			back_buf[player[p].px][player[p].py] = ' '; // 이동 전 흔적 지우기
-			player[p].px = nx;
-			player[p].py = ny;
+			move_tail(p, nx, ny);
+			return 0;
 		}
 	}
-	else if ((yh_killmode == true))
+
+	if ((ny == 1) || ((ny == 2) && ((nx > 5) && (nx < 9)))) // 도착 조건
 	{
-		for (int i = 1; i < 10; i++)
-		{
-			if (player[i].is_alive[0] && ((ny > player[i].py) && (nx == player[i].px))) // 문제 해결
-			{
-				back_buf[nx][ny] = back_buf[player[p].px][player[p].py]; // 이동
-				back_buf[player[p].px][player[p].py] = ' '; // 이동 전 흔적 지우기
-				player[p].px = nx;
-				player[p].py = ny;
-				break;
-			}
-			else
-			{
-				player[i].is_alive[0] = false;
-				n_alive--;
-				back_buf[player[p].px][player[p].py] = ' ';
-				break;
-			}
-		}
+		player[p].is_pass = true;
+		move_tail(p, nx, ny);
+		return 0;
 	}
-}
 
-void younghee(void)
-{
-	int ment = 0;
-
-	if (tick[0] < 6600)
+	if (((player[p].px != nx) || (player[p].py != ny)) && (player[p].is_pass == false) && (yh_killmode == true))
 	{
-		for (int i = 0; i < 3; i++) // 영희 '#'
-		{
-			back_buf[6 + i][1] = '#';
-		}
-
-		switch (tick[0] / 100)
-		{
-		case 5:
-			while (ment < 3)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		case 15:
-			while (ment < 6)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		case 25:
-			while (ment < 9)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		case 35:
-			while (ment < 12)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		case 45:
-			while (ment < 15)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		case 52:
-			while (ment < 18)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		case 57:
-			while (ment < 21)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		case 60:
-			while (ment < 24)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		case 63:
-			while (ment < 27)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		case 65:
-			while (ment < 30)
-				back_buf[15][ment] = MUGUNWHA_MENT[ment++];
-			break;
-		}
+		player[p].is_alive[0] = false;
+		n_alive--;
+		ingame_exchange_data++;
 	}
-	else if (tick > 6600 && tick < 9000)
+	else
 	{
-		yh_killmode = true;
-
-		for (int i = 0; i < 3; i++) // 영희 '@'
-		{
-			back_buf[6 + i][1] = '@';
-		}
+		move_tail(p, nx, ny);
 	}
-	else if (tick > 9000) // 패배자 출력
-	{
-		// 탈락자 검색
-		if (n_alivepost != n_alive)
-		{
-			n_alivepost = n_alive; // 이전값과 동기화
-
-			for (int i = 0; i < n_player; i++)
-			{
-				player_outlist[i] = 'v';
-			}
-
-			for (int i = 0, j = 0; i < n_player; i++)
-			{
-				if (player_statuspost[i] != player[i].is_alive[0])
-				{
-					player_statuspost[i] = player[i].is_alive[0];
-					player_outlist[j++] = i;
-				}
-			}
-
-			dialog(1, -1);
-		}
-
-		for (int i = 0; i < 30; i++) // 무궁화 멘트 지우기
-		{
-			back_buf[15][i] = '.';
-		}
-		display();
-		for (int i = 0; i < 30; i++)
-		{
-			back_buf[15][i] = ' ';
-		}
-
-		yh_killmode = false;
-		tick[0] = 0; // 틱 초기화
-		count++;
-	}
+	return 0;
 }
 
 void npc_move_nightgame(void)
@@ -316,7 +209,7 @@ void npc_move_nightgame(void)
 
 	for (int p = 1; p < n_player; p++)
 	{
-		if (tick[0] % player[p].period == 0)
+		if ((tick[0] % player[p].period == 0) && (player[p].is_alive[0] == true))
 		{
 			found = false;
 
@@ -414,3 +307,221 @@ void nightgame_item_visable(void)
 		}
 	}
 }
+
+void juldarigi_master_control(void)
+{
+	key_t key = get_key();
+
+	if (key == K_PULL_LEFT)
+	{
+		str_control -= 1.0;
+		Beep(SOUND_D, 5);
+	}
+	else if (key == K_PULL_RIGHT)
+	{
+		str_control += 1.0;
+		Beep(SOUND_D, 5);
+	}
+	else if ((key == K_LAYDOWN_LEFT) && (jul_lay_down[0] == false))
+	{
+		jul_lay_down[0] = true; // 눕기 활성화
+		print_addi_status(0, -1, -1);
+		print_addi_status(6, 1, -1);
+		tick[1] = tick[0];
+		Beep(SOUND_D, 5);
+	}
+	else if ((key == K_LAYDOWN_RIGHT) && (jul_lay_down[1] == false))
+	{
+		jul_lay_down[1] = true; // 눕기 활성화
+		print_addi_status(0, -1, -1);
+		print_addi_status(6, 2, -1);
+		tick[1] = tick[0];
+		Beep(SOUND_D, 5);
+	}
+	else if (key == K_DEBUG)
+	{
+		debug_toggle = !debug_toggle;
+	}
+	else if (key == K_QUIT)
+	{
+		break_cmd = true;
+	}
+}
+
+void juldarigi_move(void)
+{
+	// 오른쪽으로 줄 당김
+	if (juldarigi_str[0] > 0.0)
+	{
+		if (jy[0] != jul_mid)
+		{
+			for (int i = 0; i < n_player; i++)
+			{
+				move_tail(i, player[i].px, player[i].py + 1);
+			}
+			for (int i = 0; i < 3; i++)
+			{
+				jy[i]++;
+				back_buf[4][jy[i]] = '-';
+			}
+		}
+		else
+		{
+			for (int i = 0; i < n_player; i++)
+			{
+				if ((player[i].py == (jy[0] - 1)) && (player[i].is_alive[0] == true))
+				{
+					player[i].is_alive[0] = false;
+					player[i].stamina = 0;
+					n_alive--;
+					print_addi_status(0, -1, -1);
+					print_addi_status(5, player[i].id, -1);
+
+					for (int j = player[i].id + 2; j < n_player; j += 2)
+					{
+						move_tail(j, player[j].px, player[j].py + 1);
+					}
+					break;
+				}
+			}
+		}
+	}
+	// 왼쪽으로 줄 당김
+	else if (juldarigi_str[0] < 0.0)
+	{
+		if (jy[2] != jul_mid)
+		{
+			for (int i = 0; i < n_player; i++)
+			{
+				move_tail(i, player[i].px, player[i].py - 1);
+			}
+			for (int i = 0; i < 3; i++)
+			{
+				jy[i]--;
+				back_buf[4][jy[i]] = '-';
+			}
+		}
+		else
+		{
+			for (int i = 0; i < n_player; i++)
+			{
+				if ((player[i].py == (jy[2] + 1)) && (player[i].is_alive[0] == true))
+				{
+					player[i].is_alive[0] = false;
+					player[i].stamina = 0;
+					n_alive--;
+					print_addi_status(0, -1, -1);
+					print_addi_status(5, player[i].id, -1);
+
+					for (int j = player[i].id + 2; j < n_player; j += 2)
+					{
+						move_tail(j, player[j].px, player[j].py - 1);
+					}
+					break;
+				}
+			}
+		}
+	}
+}
+
+void jebi_mix(void)
+{
+	int fail_jebi = randint(0, n_alive-1);
+	int print_count = 0;
+	int middle_ROW = N_ROW / 2; // 제비 좌표 높이 결정
+	int start_COL = (N_COL / 2) - ((n_alive - 1) * 2); // 제비 좌표 가로 시작 위치 결정 (가운데 유지하기 위함)
+
+	for (int i = 0; i < n_alive; i++)
+	{
+		jebis[i][1] = 0; // 모두 미개봉 설정
+
+		if (i == fail_jebi)
+			jebis[i][0] = 0;
+		else
+			jebis[i][0] = 1;
+	}
+
+	for (int i = n_alive; i < 10; i++)
+	{
+		jebis[i][1] = 2; // 제 3의 상태 Unable
+	}
+
+	for (int i = 0; i < n_alive; i++)
+	{
+		jebis[i][2] = start_COL + print_count;
+		back_buf[3][start_COL + print_count++] = '?';
+
+		for (int j = 0; j < 3; j++)
+			back_buf[3][j + print_count++] = ' ';
+	}
+}
+
+bool jebi_select(void)
+{
+	jebi_sel = 0;
+
+	while (1)
+	{
+		for (int i = 0; i < n_alive; i++)
+		{
+			back_buf[4][jebis[i][2]] = ' ';
+
+			if(jebis[i][1] == 0)
+				back_buf[3][jebis[i][2]] = '?';
+			else
+				back_buf[3][jebis[i][2]] = '@';
+		}
+
+		while (jebis[jebi_sel][1] == 1)
+		{
+			jebi_sel++;
+		}
+
+		back_buf[4][jebis[jebi_sel][2]] = '^';
+
+		key_t key = get_key();
+
+		if (key == K_LEFT)
+		{
+			Beep(SOUND_D, 5);
+
+			do
+			{
+				if (jebi_sel == 0)
+					jebi_sel = n_alive - 1;
+				else
+					jebi_sel--;
+			} while (jebis[jebi_sel][1] == 1);
+		}
+		else if (key == K_RIGHT)
+		{
+			Beep(SOUND_D, 5);
+
+			do
+			{
+				if (jebi_sel == n_alive - 1)
+					jebi_sel = 0;
+				else
+					jebi_sel++;
+			} while (jebis[jebi_sel][1] == 1);
+		}
+		else if (key == K_SPACE)
+		{
+			Beep(SOUND_D * 2, 5);
+			return false;
+		}
+		else if (key == K_DEBUG)
+		{
+			debug_toggle = !debug_toggle;
+		}
+		else if (key == K_QUIT)
+		{
+			return true;
+		}
+
+		display();
+		Sleep(10);
+		tick[0] += 10;
+	}
+}
+

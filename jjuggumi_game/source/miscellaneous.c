@@ -313,6 +313,14 @@ void enline(int n, int m)
 		}
 		printf("\n");
 	}
+	else if (n == 4)
+	{
+		for (int i = 0; i < m; i++)
+		{
+			printf(" ");
+		}
+		printf("\n");
+	}
 }
 
 void SetConsoleFontSize(int size)

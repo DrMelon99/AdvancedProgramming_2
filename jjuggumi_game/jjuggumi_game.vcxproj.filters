@@ -24,9 +24,6 @@
     <ClCompile Include="source\keyin.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="source\sample.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="source\miscellaneous.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
